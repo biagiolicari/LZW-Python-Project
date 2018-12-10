@@ -20,6 +20,9 @@ Created on Sat Dec  8 20:18:23 2018
 #   CODICE = Indice di STRINGA_txt_corrente in TABELLA
 #   EMETTI CODICE come output
  """
+ 
+from converter import convertinbits
+
 def LZW_Compression(input_File):
     
     carattere = ""
@@ -50,7 +53,13 @@ def LZW_Compression(input_File):
        
     return stringa_compressa
 
-
+'''Converte una lista di valori in un'unica stringa di testo '0/1' su 9 bit (MANCA ANCORA LO SWITCH A PIU BIT)''' 
+def Conversion(values):
+    S = ""
+    for i in values:
+        S = S + convertinbits(i,9)
+    return S
+        
             
             
         
