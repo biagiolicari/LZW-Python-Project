@@ -50,7 +50,9 @@ def LZW_Compression(input_File):
     if carattere != "" :     
         stringa_compressa.append(dict[carattere])
         
-       
+    #aggiungiamo 256 che rappresenta l'END
+    stringa_compressa.append(256);
+    
     return stringa_compressa
 
 '''Converte una lista di valori in un'unica stringa di testo '0/1' su 9 bit (MANCA ANCORA LO SWITCH A PIU BIT)''' 
