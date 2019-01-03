@@ -29,11 +29,12 @@ def Check_Integrity(Compressed) :
             del Compressed[x:]
             print("La compressionè risulta integra")
         
-            
-            
+    
+    return Compressed
+                        
 prova = Search_File()
 Check_Integrity(prova)
-print(prova)
+
                 
 
             
