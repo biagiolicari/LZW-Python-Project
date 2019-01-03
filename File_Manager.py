@@ -22,8 +22,17 @@ def Search_File() :
                 compressed = [int(i) for i in contenuto]
                 return compressed
             
+def Check_Integrity(Compressed) :
+    index = len(Compressed)
+    for x in range(index) :
+        if Compressed[x] == 256 :
+            del Compressed[x:]
+            print("La compressionè risulta integra")
+        
+            
             
 prova = Search_File()
+Check_Integrity(prova)
 print(prova)
                 
 
