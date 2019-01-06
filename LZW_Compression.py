@@ -33,6 +33,7 @@ def LZW_Compression(input_File):
         
     #ciclo che esamina ogni carattere   
     for C in input_File:
+
         txt_corrente = carattere + C #creo variabile @txt_corrente che conterra parte di testo
         
         #se @txt_corrente è gia presente nel dizionario allora carattere assume i valori in txt_corrente
@@ -51,8 +52,7 @@ def LZW_Compression(input_File):
         
     #aggiungiamo 256 che rappresenta l'END
     stringa_compressa.append(256);
-    print(dictionary)
-    
+
     return stringa_compressa
 
 '''Converte una lista di valori in un'unica stringa di testo '0/1' su 9 bit (MANCA ANCORA LO SWITCH A PIU BIT)''' 
@@ -63,7 +63,7 @@ def Conversion(values):
     return S
         
             
-test=LZW_Compression("BANANA_BANDANA_BANANA")
+test=LZW_Compression("BANANA_BANDANA")
 print(test)           
         
     
