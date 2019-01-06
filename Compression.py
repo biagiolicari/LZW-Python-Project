@@ -40,5 +40,5 @@ def Compression(input_File, char):
     return stringa_compressa
     
 
-test = Compression("BANANA_BANDANA", "T")
+test = Compression("BANANA_BANDANA", "d")
 print(test)

@@ -10,7 +10,7 @@ class lzw_dict() :
         self.dim = 257
         self.dict = {chr(i) : i for i in range(self.dim)}
         self.curr = ""
-        self.conta = 0
+        self.controllo = 0
         self.value = 0
         self.key = ""
  
@@ -24,8 +24,9 @@ class lzw_dict() :
         self.key = self.curr + char
         
         if self.key in self.dict : 
+            
            self.curr = self.key
-           self.conta= 0
+           self.controllo= 0
            self.value = self.dict[self.key]
 
             
@@ -34,7 +35,7 @@ class lzw_dict() :
             self.dict[self.key] = self.dim
             self.dim += 1
             self.curr = ""
-            self.conta = -1
+            self.controllo = -1
 
         return self.value
         
@@ -42,7 +43,7 @@ class lzw_dict() :
 
     
     def check(self) :
-        if self.conta == -1 :
+        if self.controllo == -1 :
             return True
         else :
             return False
