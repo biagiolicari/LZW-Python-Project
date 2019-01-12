@@ -26,9 +26,3 @@ def LZW_Decompress(compressed)  :
     curr = carattere
     
   return decompressed
-
-
-        
-test = [66, 65, 78, 258, 65, 95, 257, 78, 68, 260, 262, 260, 259]
-decompressed = LZW_Decompress(test)
-print (decompressed)
