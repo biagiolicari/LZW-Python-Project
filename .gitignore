@@ -114,3 +114,8 @@ dmypy.json
 .pyre/
 LZW_Decompress.py
 LZW_Compression.py
+Compressed/Prova.txt
+Compressed/Prova.txt
+File_Manager.py
+LZW_Compression.py
+LZW_Decompress.py
