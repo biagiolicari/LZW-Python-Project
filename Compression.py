@@ -5,8 +5,7 @@ Created on Thu Jan  3 17:36:51 2019
 
 @author: Gabriele Felici
 """
-from stdativ2 import trie
-from stdict import lzw_dict
+from stdati import trie, lzw_dict
 
 def Compression(input_File, char):
     

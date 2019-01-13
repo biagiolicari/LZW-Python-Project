@@ -62,9 +62,5 @@ def Conversion(values):
         S = S + convertinbits(i,9)
     return S
         
-            
-test=LZW_Compression("BANANA_BANDANA")
-print(test)           
-        
     
     
