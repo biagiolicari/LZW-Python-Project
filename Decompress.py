@@ -5,6 +5,7 @@ Created on Fri Jan 11 17:29:17 2019
 
 @author: Gabriele Felici
 """
+from stdati import trie_decompression
 
 def Decompress(values):
     dict_dim = 256
@@ -47,4 +48,14 @@ def Decompress(values):
             
         #string = string + curr
         
+    return string
+
+def Decompress_trie(values):
+    #MANCA IL CASO PARTICOLARE
+    T = trie_decompression()
+    string = chr(values[0])
+    T.lastencoded = string
+    T.lastnode = values[0]
+    for v in values[1:]:
+        string = string + T.find(v)
     return string

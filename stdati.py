@@ -119,4 +119,46 @@ class lzw_dict() :
         else :
             return False
             
-   
+'''Nella decompressione per ricostruire un path a partire da un valore è
+importante conoscere il padre di un nodo, che è unico.
+Il trie per la decompressione è un dizionario che associa a ogni nodo una
+coppia (father,label)'''
+
+class trie_decompression:
+    
+    def __init__(self):
+        self.lastencoded = ""
+        self.lastnode = -1
+        self.dim = 257
+        self.dict_for_trie = {i : (-1, chr(i)) for i in range(self.dim)}
+        
+    def __str__(self):
+        return self.dict_for_trie.__str__()
+    
+    def find(self,value):
+        #condizione di proiezione
+        if value == self.dim:
+            string = self.lastencoded + self.lastencoded[0]
+            self.lastencoded = string
+            self.dict_for_trie[value] = (self.lastnode, string[0])
+            self.lastnode = value
+            self.dim = self.dim + 1 
+            return string
+        
+        edge = self.dict_for_trie[value]
+        string = edge[1] #prima label dell'arco
+        while edge[0] != -1: #finche il padre dell'arco non è -1
+            edge = self.dict_for_trie[edge[0]] #guardo il nodo padre
+            string = edge[1] + string
+        
+        self.dict_for_trie[self.dim] = (self.lastnode, string[0])
+        self.dim = self.dim + 1
+        self.lastencoded = string
+        self.lastnode = value
+        return string
+    
+    def set_lastencoded(self, string):
+        self.lastencoded = string
+        
+    def set_lastnode(self,node):
+        self.lastnode = node
