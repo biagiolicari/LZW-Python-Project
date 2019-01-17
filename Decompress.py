@@ -6,6 +6,7 @@ Created on Fri Jan 11 17:29:17 2019
 @author: Gabriele Felici
 """
 from stdati import trie_decompression
+from converter import convertinint
 
 def Decompress(values):
     dict_dim = 256
@@ -50,12 +51,25 @@ def Decompress(values):
         
     return string
 
-def Decompress_trie(values):
+def Decompress_trie(bitstring):
     #MANCA IL CASO PARTICOLARE
+   
     T = trie_decompression()
-    string = chr(values[0])
+    numbits = 9
+    val = convertinint(bitstring[0:numbits],numbits)
+    string = chr(val)
     T.lastencoded = string
-    T.lastnode = values[0]
-    for v in values[1:]:
-        string = string + T.find(v)
+    T.lastnode = val
+    indexiniziale = 0
+    indexfinale = 9
+    
+    while val != 256:       
+        if T.dim + 1 == 2**numbits:
+            numbits = numbits+1      
+        indexiniziale = indexfinale
+        indexfinale = indexfinale + numbits
+        valstring = bitstring[indexiniziale:indexfinale]
+        val = convertinint(valstring, numbits)
+        if val != 256:
+            string = string + T.find(val)
     return string
