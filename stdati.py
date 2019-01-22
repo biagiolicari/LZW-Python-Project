@@ -162,3 +162,40 @@ class trie_decompression:
         
     def set_lastnode(self,node):
         self.lastnode = node
+        
+        
+        
+        
+class Dict_decompression:
+    def __init__(self) :
+        self.dim = 257
+        self.dictionary = {i : chr(i) for i in range(self.dim)}
+        self.curr = ""
+        self.lastencoded = ""
+        self.val = ""
+            
+    
+    def find(self,v) :
+        if v in self.dictionary:
+            self.curr = self.dictionary[v]
+            self.dictionary[self.dim] = self.lastencoded+self.curr[0]
+            self.dim += 1
+            self.lastencoded = self.curr
+            return self.lastencoded
+        else:
+            self.dictionary[self.dim] = self.lastencoded + self.lastencoded[0]
+            self.dim += 1
+            self.curr = self.dictionary[v]
+            self.lastencoded = self.curr
+            return self.lastencoded
+            
+
+            
+    def set_lastencoded(self,string):
+        self.lastencoded = string
+        
+    def set_lastnode(self,val):
+        self.curr=val
+            
+        
+        

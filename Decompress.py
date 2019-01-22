@@ -5,17 +5,22 @@ Created on Fri Jan 11 17:29:17 2019
 
 @author: Gabriele Felici
 """
-from stdati import trie_decompression
+from stdati import trie_decompression,Dict_decompression
 from converter import convertinint
-
-def Decompress(values):
-    dict_dim = 256
-    dictionary = { v : chr(v)  for v in range(dict_dim)}
+import File_Manager
+from converter import write
+import os
+"""
+def __init__(self) :
+    self.dim = 256
+    self.dictionary = { v : chr(v)  for v in range(dict_dim)}
     
-    string = ""
+    self.string = ""
     char = dictionary[values[0]]
     string = char 
     curr = ""
+def find(self,values):
+
     #caso particolare
     if values[1] >= 257:
         curr = char + char
@@ -50,6 +55,8 @@ def Decompress(values):
         #string = string + curr
         
     return string
+    
+"""
 
 def Decompress_trie(bitstring):
     #MANCA IL CASO PARTICOLARE
@@ -58,6 +65,7 @@ def Decompress_trie(bitstring):
     numbits = 9
     val = convertinint(bitstring[0:numbits],numbits)
     string = chr(val)
+
     T.lastencoded = string
     T.lastnode = val
     indexiniziale = 0
@@ -70,6 +78,8 @@ def Decompress_trie(bitstring):
         indexfinale = indexfinale + numbits
         valstring = bitstring[indexiniziale:indexfinale]
         val = convertinint(valstring, numbits)
+ 
         if val != 256:
             string = string + T.find(val)
+    
     return string

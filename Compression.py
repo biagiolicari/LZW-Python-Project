@@ -8,6 +8,7 @@ Created on Thu Jan  3 17:36:51 2019
 from stdati import trie, lzw_dict
 from converter import convertinbits
 
+
 def Compression(input_File, char):
     
     stringa_compressa = []
@@ -34,6 +35,7 @@ def Compression(input_File, char):
             stringa_compressa.append(val)
             if T.dim-1 == 2**numbits: #dim è ora il prossimo valore che verrà associato, il valore massimo attuale è T.dim-1:
                 numbits = numbits + 1 #so di avere valori fino a T.dim-1
+                
             bitstring = bitstring + convertinbits(val,numbits)
             val = T.search(C)
         
@@ -46,4 +48,9 @@ def Compression(input_File, char):
     bitstring = bitstring + convertinbits(256,numbits)
 
     return stringa_compressa, bitstring 
-    
+
+
+
+
+c = Compression('NA_BAND','d')
+print(c)

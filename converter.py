@@ -42,3 +42,6 @@ def number_from_bytestring(bitstring):
     for j in range(0,BYTEDIM):
         v = v + int(bitstring[j])*power[BYTEDIM-1-j]
     return v
+
+
+write('001001110001000001001011111001000010001000001001001110001000100100000000','sksk')
