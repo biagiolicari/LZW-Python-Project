@@ -43,4 +43,6 @@ def number_from_bytestring(bitstring):
         v = v + int(bitstring[j])*power[BYTEDIM-1-j]
     return v
 
-write('001000010001000001001001110100000010001000001001011111100000001001001110001000100100000000','sksksk')
+
+
+

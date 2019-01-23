@@ -6,7 +6,7 @@ Created on Thu Jan  3 17:36:51 2019
 @author: Gabriele Felici
 """
 from stdati import trie, lzw_dict
-from converter import convertinbits
+from converter import convertinbits,write
 
 
 def Compression(input_File, char):
@@ -50,7 +50,11 @@ def Compression(input_File, char):
     return stringa_compressa, bitstring 
 
 
+f = open('prova2.txt','r')
+obj = f.read()
 
+f.close()
 
-c = Compression('BANANA_BAND','d')
-print(c)
+t,v = Compression(obj, 'd')
+write(v,'prova')
+

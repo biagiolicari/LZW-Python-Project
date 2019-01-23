@@ -7,9 +7,10 @@ Created on Fri Jan 11 17:29:17 2019
 """
 from stdati import trie_decompression,Dict_decompression
 from converter import convertinint
-import File_Manager
+from File_Manager import search_file
 from converter import write
 import os
+from pathlib import Path
 """
 def __init__(self) :
     self.dim = 256
@@ -90,12 +91,12 @@ def Decompress(filename):
     bin_cod,path = search_file(filename) #richiamo la funzione di ricerca file/dir
     for _ in bin_cod :
         dec = Decompress_trie(_) #ottengo stringa decompressa
+        print(dec)
         name = Path(path[i]) #estraggo path del file decompresso
         f = open(os.path.join(name.parent,name.stem+'.txt'), 'w') #creazione nuovo file decompresso
         f.write(dec)
         f.close()
         name.unlink() #rimuovo il file compresso
         i += 1
-        
-        
-Decompress('Compressed')
+
+#Decompress('Compressed')

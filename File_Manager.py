@@ -6,28 +6,12 @@ Created on Wed Jan  2 12:38:29 2019
 """
 
 import os
-from converter import convertinbits
+from converter import convertinbits,write
 from pathlib import Path
+from Compression import Compression
 
 BYTEDIM = 8            
-'''
-def Search_File(name) :
-    z=''
-    abspath=""
-    for root, dirs, files in os.walk(os.getcwd()):
-        for file in files:
-            if file == name : 
-                if os.path.isfile :
-                   abspath = os.path.join(root,file)                 
-                   f = open(os.path.join(root, file),"rb")                   
-                   for byte in f.read() :               
-                       z += (convertinbits(byte,BYTEDIM))
-                   f.close()
-                                     
-            
-    return z,abspath   
-'''
-            
+        
 def decompress_file(filename) :
     z = ''
     f = open(os.path.abspath(filename),'rb')
@@ -66,5 +50,5 @@ def search_dir(dirname) :
         bin_code.append(dec) # aggiungo il testo decompresso ad una lista
         
     return bin_code,abspath
-
+       
     
