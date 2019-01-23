@@ -99,4 +99,3 @@ def Decompress(filename):
         name.unlink() #rimuovo il file compresso
         i += 1
 
-#Decompress('Compressed')

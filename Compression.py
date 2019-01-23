@@ -48,13 +48,3 @@ def Compression(input_File, char):
     bitstring = bitstring + convertinbits(256,numbits)
 
     return stringa_compressa, bitstring 
-
-
-f = open('prova2.txt','r')
-obj = f.read()
-
-f.close()
-
-t,v = Compression(obj, 'd')
-write(v,'prova')
-

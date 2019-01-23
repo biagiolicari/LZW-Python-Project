@@ -19,7 +19,6 @@ def decompress_file(filename) :
         z+=(convertinbits(byte,BYTEDIM))
         f.close()
     return z
-    
 
 def search_file(Name) :
     
@@ -28,15 +27,17 @@ def search_file(Name) :
 
     for root,dirs,files in os.walk(os.getcwd()):
         for file in files:
-            if file == Name and os.path.isfile(os.path.join(root,file)) :
-                abspath.append(os.path.join(root,file))
-                code = decompress_file(os.path.join(root,file)) 
-                bin_code.append(code)
+            if file == Name and os.path.isfile(os.path.join(root,Name)):
+                bin_code,abspath = search_onlyfile(Name)
+
                 break
+
             elif os.path.isdir(os.path.join(root,Name)):
                 bin_code,abspath = search_dir(Name)
                        
         return bin_code,abspath
+
+
 
 def search_dir(dirname) :
     #mposto la Path della directory da considerare, dove cercare i file lzw 
@@ -50,5 +51,34 @@ def search_dir(dirname) :
         bin_code.append(dec) # aggiungo il testo decompresso ad una lista
         
     return bin_code,abspath
-       
+
+
+def search_onlyfile(filename):
+    p = Path.cwd()
+    abspath = []
+    bin_code=[]
     
+    for p in p.rglob(filename) :
+        abspath.append(p.resolve())
+        dec = decompress_file(p.resolve())
+        bin_code.append(dec)
+    return bin_code,abspath
+    
+
+
+def write_file(filename, dict_or_trie):
+    path = Path.cwd()
+    
+    for file in path.rglob(filename):
+        if file.is_file() :
+            f = open(file,'r')
+            cod_compressed,bin_compressed = Compression(f.read(),dict_or_trie)
+            write(bin_compressed,os.path.join(file.parent,file.stem))
+            f.close()
+            file.unlink()
+    return 0
+
+
+
+#write_file('prova.txt','d')
+            
