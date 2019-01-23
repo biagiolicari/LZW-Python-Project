@@ -66,12 +66,5 @@ def search_dir(dirname) :
         bin_code.append(dec) # aggiungo il testo decompresso ad una lista
         
     return bin_code,abspath
-        
-    
-t,v=search_file('Compressed')
-for i in t :
-    print(i)
 
-for i in v:
-    print(i)
     

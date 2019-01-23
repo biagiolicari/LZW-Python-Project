@@ -52,5 +52,5 @@ def Compression(input_File, char):
 
 
 
-c = Compression('NA_BAND','d')
+c = Compression('BANANA_BAND','d')
 print(c)
