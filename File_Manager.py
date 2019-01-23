@@ -52,6 +52,15 @@ def search_dir(dirname) :
         
     return bin_code,abspath
 
+def write_dir(dirname,dt) :
+    p = Path(dirname)
+    for p in p.rglob('*.txt'):
+        f = open(p,'r')
+        cod_compressed,bin_compressed = Compression(f.read(),dt)
+        write(bin_compressed,os.path.join(p.parent,p.stem))
+        f.close()
+        p.unlink()
+
 
 def search_onlyfile(filename):
     p = Path.cwd()
@@ -76,9 +85,11 @@ def write_file(filename, dict_or_trie):
             write(bin_compressed,os.path.join(file.parent,file.stem))
             f.close()
             file.unlink()
+        if file.is_dir() :
+            write_dir(file,dict_or_trie)
     return 0
 
 
 
-#write_file('prova.txt','d')
+write_file('Compressed','d')
             

@@ -91,11 +91,9 @@ def Decompress(filename):
     bin_cod,path = search_file(filename) #richiamo la funzione di ricerca file/dir
     for _ in bin_cod :
         dec = Decompress_trie(_) #ottengo stringa decompressa
-        print(dec)
         name = Path(path[i]) #estraggo path del file decompresso
         f = open(os.path.join(name.parent,name.stem+'.txt'), 'w') #creazione nuovo file decompresso
         f.write(dec)
         f.close()
         name.unlink() #rimuovo il file compresso
         i += 1
-
