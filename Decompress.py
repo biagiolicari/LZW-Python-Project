@@ -7,7 +7,7 @@ Created on Fri Jan 11 17:29:17 2019
 """
 from stdati import trie_decompression,Dict_decompression
 from converter import convertinint
-from File_Manager import search_file
+from File_Manager import search
 from converter import write
 import os
 from pathlib import Path
@@ -88,7 +88,7 @@ def Decompress_trie(bitstring):
 
 def Decompress(filename):
     i = 0
-    bin_cod,path = search_file(filename) #richiamo la funzione di ricerca file/dir
+    bin_cod,path = search(filename) #richiamo la funzione di ricerca file/dir
     for _ in bin_cod :
         dec = Decompress_trie(_) #ottengo stringa decompressa
         name = Path(path[i]) #estraggo path del file decompresso
@@ -97,3 +97,5 @@ def Decompress(filename):
         f.close()
         name.unlink() #rimuovo il file compresso
         i += 1
+
+Decompress('')
