@@ -89,6 +89,7 @@ def Decompress_trie(bitstring):
 def Decompress(filename):
     i = 0
     bin_cod,path = search(filename) #richiamo la funzione di ricerca file/dir
+    
     for _ in bin_cod :
         dec = Decompress_trie(_) #ottengo stringa decompressa
         name = Path(path[i]) #estraggo path del file decompresso
@@ -98,4 +99,4 @@ def Decompress(filename):
         name.unlink() #rimuovo il file compresso
         i += 1
 
-Decompress('')
+Decompress('C:/Users/Biagio/Desktop/tr')

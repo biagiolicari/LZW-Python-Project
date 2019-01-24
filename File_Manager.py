@@ -68,19 +68,19 @@ def write_dir(dirname,dt) :
 
 
 def write_file(filename, dict_or_trie):
-    path = Path.cwd()
+    path = Path(filename).resolve()
     
-    for file in path.rglob(filename):
-        if file.is_file() :
-            f = open(file,'r')
-            cod_compressed,bin_compressed = Compression(f.read(),dict_or_trie)
-            write(bin_compressed,os.path.join(file.parent,file.stem))
-            f.close()
-            file.unlink()
-        if file.is_dir() :
-            write_dir(file,dict_or_trie)
+    
+    if path.is_file() :
+         f = open(path,'r')
+         cod_compressed,bin_compressed = Compression(f.read(),dict_or_trie)
+         write(bin_compressed,os.path.join(path.parent,path.stem))
+         f.close()
+         path.unlink()
+    if path.is_dir() :
+         write_dir(path,dict_or_trie)
     return 0
 
 
-#write_file('ciao.py','d')
+#write_file('C:/Users/Biagio/Desktop/tr','d')
             
