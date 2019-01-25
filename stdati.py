@@ -106,34 +106,32 @@ class trie():
         
     
 class lzw_dict() :
+    '''Classe che implementa un dizionario, sfruttando la coppia <chiave,valore>, per implementare la compressione/decompressione di Lempel-Ziv-Welch'''
 
     def __init__(self) :
-        self.dim = 257
-        self.dict = {chr(i) : i for i in range(self.dim)}
+        self.dim = 257 #END compreso
+        self.dict = {chr(i) : i for i in range(self.dim)} #costruisco il dizionario con coppia <chr(i),i)>
         self.curr = ""
         self.controllo = 0
         self.value = 0
         self.key = ""
  
     
-
+    '''Funzione che stampa il dizionario'''
     def __str__(self) :
         return self.dict
 
 
     def search(self, char) :
-        self.key = self.curr + char
-        
-        if self.key in self.dict : 
-            
+        self.key = self.curr + char 
+        '''se il valore di key è presente nel dizionario, ritorno col valore presente nel dizionario creato.'''
+        if self.key in self.dict : #         
            self.curr = self.key
            self.controllo= 0
-           self.value = self.dict[self.key]
-
-            
-        else :
-            
-            self.dict[self.key] = self.dim
+           self.value = self.dict[self.key] 
+        #altrimenti aggiungo tale valore al dizionario, andando ad impostare curr pari a "" per la prossima iterazione
+        else :            
+            self.dict[self.key] = self.dim 
             self.dim += 1
             self.curr = ""
             self.controllo = -1

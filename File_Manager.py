@@ -11,24 +11,34 @@ from pathlib import Path
 from Compression import Compression
 
 BYTEDIM = 8
-pattern = ['*.txt','*.c','*.cc','*.xml','*.doc','*.html','*.py','*.htm','*.cpp']
-pattern_compressed = ['*.Z', '*.z', '*.lzw']            
-        
+pattern = ['*.txt','*.c','*.cc','*.xml','*.html','*.py','*.htm','*.cpp', '*.z', '*.lzw'] #pattern possibili da comprimere
+pattern_compressed = ['*.Z', '*.z', '*.lzw']    #pattern lzw        
+
+'''Funzione che legge all'interno di un determinato file compresso e ritorna la stringbit da dare in pasto al decompressore '''        
 def decompress_file(filename) :
     z = ''
-    f = open(os.path.abspath(filename),'rb')
-    for byte in f.read() :
-        z+=(convertinbits(byte,BYTEDIM))
+    try :
+        f = open(os.path.abspath(filename),'rb')
+        try :
+            for byte in f.read() :
+                z+=(convertinbits(byte,BYTEDIM))
+        except (ImportError, EOFError) as ex :
+            print('errore imprevisto : ' , ex)
+                
+    except IOError as ioerr:
+        print('File not found :', ioerr)
+        
+    finally :
         f.close()
+        
     return z
-
 
 def search(filename):
     path = Path(filename).resolve()
     bin_code = []
     abspath = []
     
-    if path.is_file() :      
+    if path.is_file() : #se il path rappresenta un file eseguo i controlli per l'estensione     
         for _ in pattern_compressed : #se il file rientra nelle etensioni previste si esegue la decompressione
             if path.suffix == _[1:] :
                 abspath.append(path)
@@ -55,32 +65,40 @@ def search_dir(dirname) :
         
     return bin_code,abspath
 
+''' Funzione che comprime una intera cartella con annesse subdir presenti all'interno contenenti file compatibili col pattern specificato '''
 def write_dir(dirname,dt) :
     p = Path(dirname)
     
     for _ in pattern :
-        for p in p.rglob(_):
-            f = open(p,'r')
-            cod_compressed,bin_compressed = Compression(f.read(),dt)
-            write(bin_compressed,os.path.join(p.parent,p.stem))
-            f.close()
-            p.unlink()
+        for p in p.rglob(_): #ricerca ricorsiva all'interno del dir Path specificato di file compatili per essere compressi
+            try :
+                f = open(p,'r')
+                cod_compressed,bin_compressed = Compression(f.read(),dt) #richiamo la definizione di Compressione sul file specificato usando il dizionario o il trie
+                write(bin_compressed,os.path.join(p.parent,p.stem)) #richiamo la funzione che scrive il file compresso
+                f.close()
+                p.unlink() #elimino il file dato in pasto al compressore
+            except IOError :
+                print('errore in apertura di ', p)
 
 
 def write_file(filename, dict_or_trie):
     path = Path(filename).resolve()
-    
-    
+      
     if path.is_file() :
-         f = open(path,'r')
-         cod_compressed,bin_compressed = Compression(f.read(),dict_or_trie)
-         write(bin_compressed,os.path.join(path.parent,path.stem))
-         f.close()
-         path.unlink()
+        try :
+            f = open(path,'r')
+            cod_compressed,bin_compressed = Compression(f.read(),dict_or_trie)
+            write(bin_compressed,os.path.join(path.parent,path.stem))
+            f.close()
+            path.unlink()
+        except IOError :
+            print('Errore nel file')
+         
     if path.is_dir() :
-         write_dir(path,dict_or_trie)
+            write_dir(path,dict_or_trie)
+            
     return 0
 
 
-#write_file('C:/Users/Biagio/Desktop/tr','d')
+#write_file('C:/Users/Biagio/Desktop/Jupyter-notebooks-master/tr','d')
             

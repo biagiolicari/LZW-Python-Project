@@ -25,7 +25,7 @@ def convertinint(bits, numbits):
 
 ''' Funzione che scrive su file la stringa compressa'''
 def write(stringbits, filename):
-     with open(filename+'.Z', "wb") as f:
+     with open(filename+'.z', "wb") as f:
          if len(stringbits)%BYTEDIM != 0:
              for _ in range(0, BYTEDIM-(len(stringbits)%BYTEDIM)):
                  stringbits += '0' #aggiungo il padding se serve
