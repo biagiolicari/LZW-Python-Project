@@ -152,7 +152,7 @@ importante conoscere il padre di un nodo, che è unico.
 Il trie per la decompressione è un dizionario che associa a ogni nodo una
 coppia (father,label)'''
 
-class trie_decompression:
+class trie_uncompression:
     
     def __init__(self):
         self.lastencoded = ""
@@ -194,7 +194,7 @@ class trie_decompression:
         
         
         
-class Dict_decompression:
+class Dict_uncompression:
     def __init__(self) :
         self.dim = 257
         self.dictionary = {i : chr(i) for i in range(self.dim)}
