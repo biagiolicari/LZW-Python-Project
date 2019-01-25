@@ -38,7 +38,7 @@ class trie():
     
     @nodes.setter
     def nodes(self, nodes_list):
-        return
+        self.__node = nodes_list
     
     @property
     def dim(self):
@@ -46,7 +46,7 @@ class trie():
     
     @dim.setter
     def dim(self, newdim):
-        return
+        self.__dim = newdim
     
     @property
     def mynode(self):
@@ -54,7 +54,7 @@ class trie():
     
     @mynode.setter
     def mynode(self, newmynode):
-        return
+        self.__mynode = newmynode
     
     '''Stampa la lista di adiacenza. Viene usata da print().'''
     def __str__(self):
