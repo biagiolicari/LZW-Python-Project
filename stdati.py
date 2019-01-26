@@ -155,54 +155,92 @@ coppia (father,label)'''
 class trie_uncompression:
     
     def __init__(self):
-        self.lastencoded = ""
-        self.lastnode = -1
-        self.dim = 257
-        self.dict_for_trie = {i : (-1, chr(i)) for i in range(self.dim)}
+        self.__lastencoded = ""
+        self.__lastnode = -1
+        self.__dim = 257
+        self.__dict_for_trie = {i : (-1, chr(i)) for i in range(self.dim)}
         
+        super().__setattr__('lastencoded',self.__lastencoded)
+        super().__setattr__('last',self.__lastnode)
+        super().__setattr__('dim',self.__dim)
+        super().__setattr__('dict_for_trie',self.__dict_for_trie)
+        
+    @property
+    def lastencoded(self):
+        return self.__lastencoded
+    
+    @lastencoded.setter
+    def lastencoded(self, encoded):
+        self.__lastencoded = encoded
+    
+    @property
+    def last(self):
+        return self.__lastnode
+    
+    @last.setter
+    def last(self, node):
+        self.__lastnode = node
+    
+    @property
+    def dim(self):
+        return self.__dim
+    
+    @dim.setter
+    def dim(self, newdim):
+        self.__dim = newdim
+        
+    @property
+    def dict_for_trie(self):
+        return self.__dict_for_trie
+    
+    @dict_for_trie.setter
+    def dict_for_trie(self, newdict):
+        self.__dict_for_trie = newdict
+
+
     def __str__(self):
-        return self.dict_for_trie.__str__()
+        return self.__dict_for_trie.__str__()
     
     def find(self,value):
         #condizione di proiezione
-        if value == self.dim:
-            string = self.lastencoded + self.lastencoded[0]
-            self.lastencoded = string
-            self.dict_for_trie[value] = (self.lastnode, string[0])
-            self.lastnode = value
-            self.dim = self.dim + 1 
+        if value == self.__dim:
+            string = self.__lastencoded + self.__lastencoded[0]
+            self.__lastencoded = string
+            self.__dict_for_trie[value] = (self.__lastnode, string[0])
+            self.__lastnode = value
+            self.__dim = self.__dim + 1 
             return string
         
-        edge = self.dict_for_trie[value]
+        edge = self.__dict_for_trie[value]
         string = edge[1] #prima label dell'arco
         while edge[0] != -1: #finche il padre dell'arco non è -1
-            edge = self.dict_for_trie[edge[0]] #guardo il nodo padre
+            edge = self.__dict_for_trie[edge[0]] #guardo il nodo padre
             string = edge[1] + string
         
-        self.dict_for_trie[self.dim] = (self.lastnode, string[0])
-        self.dim = self.dim + 1
-        self.lastencoded = string
-        self.lastnode = value
+        self.__dict_for_trie[self.__dim] = (self.__lastnode, string[0])
+        self.__dim = self.__dim + 1
+        self.__lastencoded = string
+        self.__lastnode = value
         return string
     
-    def set_lastencoded(self, string):
-        self.lastencoded = string
-        
-    def set_lastnode(self,node):
-        self.lastnode = node
-        
-        
-        
-        
+    
 class Dict_uncompression:
     def __init__(self) :
         self.dim = 257
         self.dictionary = {i : chr(i) for i in range(self.dim)}
         self.curr = ""
         self.lastencoded = ""
-        self.val = ""
             
+        super().__setattr__('last') #ACCETTABILE???
+        
+    @property
+    def last(self):
+        return 
     
+    @last.setter
+    def last(self, node):
+        return
+        
     def find(self,v) :
         if v in self.dictionary:
             self.curr = self.dictionary[v]
@@ -210,20 +248,12 @@ class Dict_uncompression:
             self.dim += 1
             self.lastencoded = self.curr
             return self.lastencoded
-        else:
+        else: #proiezione
             self.dictionary[self.dim] = self.lastencoded + self.lastencoded[0]
             self.dim += 1
             self.curr = self.dictionary[v]
             self.lastencoded = self.curr
             return self.lastencoded
-            
-
-            
-    def set_lastencoded(self,string):
-        self.lastencoded = string
-        
-    def set_lastnode(self,val):
-        self.curr=val
             
         
         
