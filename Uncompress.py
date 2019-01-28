@@ -26,7 +26,7 @@ def Uncompress(bitstring,td):
     string = chr(val)
 
     T.lastencoded = string
-    T.lastnode = val
+    T.last = val #nel caso del trie salva l'ultimo nodo, nel dict non fa nulla
     indexiniziale = 0
     indexfinale = 9
     

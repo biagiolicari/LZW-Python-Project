@@ -95,7 +95,21 @@ def write_dir(dirname,dt) :
                 except IOError :
                     print('errore in apertura di ', p)
 
+def percent_compressed(f): #decora write_file in caso di -v
+    def compress_file(filename, dict_or_trie):
+        path = Path(filename).resolve()
+        before = file_size(path)   
+        f(filename,dict_or_trie)
+        path = path.with_suffix('.z')
+        if not path.exists():
+            print("Il file compresso è più grande dell'originale")
+            return
+        after = file_size(path)
+        percent = (before - after)/before * 100
+        print("Compressione avvenuta del {} %".format(percent))
+    return compress_file
 
+@percent_compressed
 def write_file(filename, dict_or_trie):
     
     path = Path(filename).resolve()
@@ -105,11 +119,17 @@ def write_file(filename, dict_or_trie):
             check_ext(path)
         else :
             try :
+                size_before = file_size(path)
                 f = open(path,'r')
                 cod_compressed,bin_compressed = Compress(f.read(),dict_or_trie)
                 write(bin_compressed,os.path.join(path.parent,path.stem))
                 f.close()
-                path.unlink()
+                newpath = path.with_suffix('.z')
+                size_after = file_size(newpath)
+                if size_before > size_after:
+                    path.unlink()
+                else:
+                    newpath.unlink()
             except IOError as ex :
                 print('Errore nel file : ', ex)
          
@@ -122,6 +142,11 @@ def write_file(filename, dict_or_trie):
 def check_ext (path):
         new_ext = path.with_suffix('.Z')
         os.rename(path,new_ext)
+
+def file_size(fname): #NON FUNZIONA CON LE DIRECTORY
+        statinfo = os.stat(fname)
+        return statinfo.st_size
+
 
 #write_file('C:/Users/Biagio/Desktop/prova','d')
             
