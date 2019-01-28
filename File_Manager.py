@@ -83,34 +83,45 @@ def write_dir(dirname,dt) :
     
     for _ in pattern :
         for p in p.rglob(_): #ricerca ricorsiva all'interno del dir Path specificato di file compatili per essere compressi
-            try :
-                f = open(p,'r')
-                cod_compressed,bin_compressed = Compress(f.read(),dt) #richiamo la definizione di Compressione sul file specificato usando il dizionario o il trie
-                write(bin_compressed,os.path.join(p.parent,p.stem)) #richiamo la funzione che scrive il file compresso
-                f.close()
-                p.unlink() #elimino il file dato in pasto al compressore
-            except IOError :
-                print('errore in apertura di ', p)
+            if p.suffix == '.z' :
+                check_ext(p)
+            else :
+                try :
+                    f = open(p,'r')
+                    cod_compressed,bin_compressed = Compress(f.read(),dt) #richiamo la definizione di Compressione sul file specificato usando il dizionario o il trie
+                    write(bin_compressed,os.path.join(p.parent,p.stem)) #richiamo la funzione che scrive il file compresso
+                    f.close()
+                    p.unlink() #elimino il file dato in pasto al compressore
+                except IOError :
+                    print('errore in apertura di ', p)
 
 
 def write_file(filename, dict_or_trie):
+    
     path = Path(filename).resolve()
       
     if path.is_file() :
-        try :
-            f = open(path,'r')
-            cod_compressed,bin_compressed = Compress(f.read(),dict_or_trie)
-            write(bin_compressed,os.path.join(path.parent,path.stem))
-            f.close()
-            path.unlink()
-        except IOError as ex :
-            print('Errore nel file : ', ex)
+        if path.suffix == '.z' :
+            check_ext(path)
+        else :
+            try :
+                f = open(path,'r')
+                cod_compressed,bin_compressed = Compress(f.read(),dict_or_trie)
+                write(bin_compressed,os.path.join(path.parent,path.stem))
+                f.close()
+                path.unlink()
+            except IOError as ex :
+                print('Errore nel file : ', ex)
          
     if path.is_dir() :
             write_dir(path,dict_or_trie)
             
     return 0
 
+'''funzione che nel caso in cui il file sia gia compresso, ne modifica l'estensione'''
+def check_ext (path):
+        new_ext = path.with_suffix('.Z')
+        os.rename(path,new_ext)
 
-#write_file('Compressed','d')
+#write_file('C:/Users/Biagio/Desktop/prova','d')
             
