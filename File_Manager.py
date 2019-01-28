@@ -103,8 +103,8 @@ def write_file(filename, dict_or_trie):
             write(bin_compressed,os.path.join(path.parent,path.stem))
             f.close()
             path.unlink()
-        except IOError :
-            print('Errore nel file')
+        except IOError as ex :
+            print('Errore nel file : ', ex)
          
     if path.is_dir() :
             write_dir(path,dict_or_trie)
@@ -112,5 +112,5 @@ def write_file(filename, dict_or_trie):
     return 0
 
 
-#write_file('C:/Users/Biagio/Desktop/Jupyter-notebooks-master/tr','d')
+#write_file('Compressed','d')
             

@@ -11,10 +11,16 @@ from File_Manager import search #da togliere
 import os #idem sopra
 from pathlib import Path #idem
 
-def Uncompress(bitstring):
+def Uncompress(bitstring,td):
     #MANCA IL CASO PARTICOLARE
-   
-    T = trie_uncompression()
+    
+    if td == 't' or 'T' or 'trie' :
+        T = trie_uncompression()
+    elif td == 'd' or 'D' or 'dict' :
+        T = Dict_uncompression()
+    else:
+        T = trie_uncompression()
+        
     numbits = 9
     val = convertinint(bitstring[0:numbits],numbits)
     string = chr(val)
@@ -38,15 +44,17 @@ def Uncompress(bitstring):
     return string
 
 
-def Uncompress_file(filename):
+def Uncompress_file(filename,dt):
     i = 0
     bin_cod,path = search(filename) #richiamo la funzione di ricerca file/dir
     
     for _ in bin_cod :
-        dec = Uncompress(_) #ottengo stringa decompressa
+        dec = Uncompress(_,dt) #ottengo stringa decompressa
         name = Path(path[i]) #estraggo path del file decompresso
         f = open(os.path.join(name.parent,name.stem+'.txt'), 'w') #creazione nuovo file decompresso
         f.write(dec)
         f.close()
         name.unlink() #rimuovo il file compresso
         i += 1
+        
+#Uncompress_file('Compressed','d')
