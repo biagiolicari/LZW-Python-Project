@@ -109,40 +109,89 @@ class lzw_dict() :
     '''Classe che implementa un dizionario, sfruttando la coppia <chiave,valore>, per implementare la compressione/decompressione di Lempel-Ziv-Welch'''
 
     def __init__(self) :
-        self.dim = 257 #END compreso
-        self.dict = {chr(i) : i for i in range(self.dim)} #costruisco il dizionario con coppia <chr(i),i)>
-        self.curr = ""
-        self.controllo = 0
-        self.value = 0
-        self.key = ""
+        self.__dim = 257 #END compreso
+        self.__dict = {chr(i) : i for i in range(self.dim)} #costruisco il dizionario con coppia <chr(i),i)>
+        self.__curr = ""
+        self.__controllo = 0
+        self.__value = 0
+        self.__key = ""
+        
+        
+        super().__setattr__('dict',self.__dict)
+        super().__setattr__('dim',self.__dim)
+        super().__setattr__('curr',self.__curr)
+        super().__setattr__('controllo',self.__controllo)
+        super().__setattr__('vaue',self.__value)
+        super().__setattr__('key',self.__key)
+        
+        
+    @property
+    def controllo(self):
+        return self.__controllo
+    
+    @controllo.setter
+    def controllo(self, chk):
+        self.__controllo = chk
+
+    @property
+    def value(self):
+        return self.__value
+    
+    @value.setter
+    def controllo(self, val):
+        self.__value = val
+    
+    @property
+    def key(self):
+        return self.__key
+    
+    @key.setter
+    def key(self, k):
+        self.__key = k
+    
+    @property
+    def dim(self):
+        return self.__dim
+    
+    @dim.setter
+    def dim(self, newdim):
+        self.__dim = newdim
+        
+    @property
+    def dict(self):
+        return self.__dict
+    
+    @dict.setter
+    def dict(self, newdict):
+        self.__dict = newdict
  
     
     '''Funzione che stampa il dizionario'''
     def __str__(self) :
-        return self.dict
+        return self.__dict
 
 
     def search(self, char) :
-        self.key = self.curr + char 
+        self.__key = self.__curr + char 
         '''se il valore di key è presente nel dizionario, ritorno col valore presente nel dizionario creato.'''
-        if self.key in self.dict : #         
-           self.curr = self.key
-           self.controllo= 0
-           self.value = self.dict[self.key] 
+        if self.__key in self.__dict : #         
+           self.__curr = self.__key
+           self.__controllo= 0
+           self.__value = self.__dict[self.__key] 
         #altrimenti aggiungo tale valore al dizionario, andando ad impostare curr pari a "" per la prossima iterazione
         else :            
-            self.dict[self.key] = self.dim 
-            self.dim += 1
-            self.curr = ""
-            self.controllo = -1
+            self.__dict[self.__key] = self.__dim 
+            self.__dim += 1
+            self.__curr = ""
+            self.__controllo = -1
 
-        return self.value
+        return self.__value
         
 
 
 
     def check(self) :
-        if self.controllo == -1 :
+        if self.__controllo == -1 :
             return True
         else :
             return False
@@ -226,12 +275,16 @@ class trie_uncompression:
     
 class Dict_uncompression:
     def __init__(self) :
-        self.dim = 257
-        self.dictionary = {i : chr(i) for i in range(self.dim)}
-        self.curr = ""
-        self.lastencoded = ""
+        self.__dim = 257
+        self.__dictionary = {i : chr(i) for i in range(self.dim)}
+        self.__curr = ""
+        self.__lastencoded = ""
             
         super().__setattr__('last') #ACCETTABILE???
+        super().__setattr('dim',self.__dim)
+        super().__setattr('dictionary',self.__dictionary)
+        super().__setattr('curr',self.__curr)
+        super().__setattr('lastencoded',self.__lastencoded)
         
     @property
     def last(self):
@@ -240,20 +293,52 @@ class Dict_uncompression:
     @last.setter
     def last(self, node):
         return
+    
+    @property
+    def dim(self):
+        return self.__dim
+    
+    @dim.setter
+    def dim(self, newdim):
+        self.__dim = newdim
+        
+    @property
+    def curr(self,newcurr):
+        self.__curr = newcurr
+        
+    @curr.setter
+    def curr(self):
+        return self.__curr
+    
+    @property
+    def lastencoded(self):
+        return self.__lastencoded
+    
+    @lastencoded.setter
+    def lastencoded(self, encoded):
+        self.__lastencoded = encoded
+        
+    @property
+    def dictionary(self):
+        return self.__dict_for_trie
+    
+    @dictionary.setter
+    def dictionary(self, newdict):
+        self.__dict_for_trie = newdict
         
     def find(self,v) :
-        if v in self.dictionary:
-            self.curr = self.dictionary[v]
-            self.dictionary[self.dim] = self.lastencoded+self.curr[0]
-            self.dim += 1
-            self.lastencoded = self.curr
-            return self.lastencoded
+        if v in self.__dictionary:
+            self.__curr = self.__dictionary[v]
+            self.__dictionary[self.__dim] = self.__lastencoded+self.__curr[0]
+            self.__dim += 1
+            self.__lastencoded = self.__curr
+            return self.__lastencoded
         else: #proiezione
-            self.dictionary[self.dim] = self.lastencoded + self.lastencoded[0]
-            self.dim += 1
-            self.curr = self.dictionary[v]
-            self.lastencoded = self.curr
-            return self.lastencoded
+            self.__dictionary[self.dim] = self.__lastencoded + self.__lastencoded[0]
+            self.__dim += 1
+            self.__curr = self.__dictionary[v]
+            self.__lastencoded = self.__curr
+            return self.__lastencoded
             
         
         
