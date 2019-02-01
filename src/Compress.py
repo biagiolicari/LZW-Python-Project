@@ -5,8 +5,8 @@ Created on Thu Jan  3 17:36:51 2019
 
 @author: Gabriele Felici
 """
-from stdati import trie, lzw_dict
-from converter import convertinbits
+from src.stdati import trie, lzw_dict
+from src.converter import convertinbits
 
 
 def Compress(input_File, char):

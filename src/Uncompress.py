@@ -5,9 +5,9 @@ Created on Fri Jan 11 17:29:17 2019
 
 @author: Gabriele Felici
 """
-from stdati import trie_uncompression,Dict_uncompression
-from converter import convertinint
-from File_Manager import search #da togliere
+from src.stdati import trie_uncompression,Dict_uncompression
+from src.converter import convertinint
+from src.File_Manager import search,search_dir #da togliere
 import os #idem sopra
 from pathlib import Path #idem
 
@@ -44,9 +44,15 @@ def Uncompress(bitstring,td):
     return string
 
 
-def Uncompress_file(filename,dt):
+def Uncompress_file(filename,dt,r):
     i = 0
-    bin_cod,path = search(filename) #richiamo la funzione di ricerca file/dir
+    filename = Path(filename)
+    if filename.is_file() and r == False :
+        bin_cod,path = search(filename) #richiamo la funzione di ricerca file/dir
+    elif filename.is_dir() and r == True:
+        bin_cod,path = search_dir(filename)
+    else:
+        print('errore!')
     
     for _ in bin_cod :
         dec = Uncompress(_,dt) #ottengo stringa decompressa
@@ -57,4 +63,4 @@ def Uncompress_file(filename,dt):
         name.unlink() #rimuovo il file compresso
         i += 1
         
-#Uncompress_file('Compressed','d')
+#Uncompress_file('C:/Users/Biagio/Documents/GitHub/LZW-Python-Project/Compressed','d')
