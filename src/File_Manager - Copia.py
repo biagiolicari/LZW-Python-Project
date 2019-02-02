@@ -7,9 +7,9 @@ Created on Wed Jan  2 12:38:29 2019
 """
 
 import os
-from converter import convertinbits,number_from_bytestring
+from src.converter import convertinbits,number_from_bytestring
 from pathlib import Path
-from Compress import Compress
+from src.Compress import Compress
 #from Uncompress import Uncompress
 BYTEDIM = 8
 pattern = ['*.txt','*.c','*.cc','*.xml','*.html','*.py','*.htm','*.cpp', '*.z', '*.lzw'] #pattern possibili da comprimere
@@ -46,6 +46,7 @@ def write(stringbits, filename):
              bytevalues.append(number_from_bytestring(stringbits[BYTEDIM*i:BYTEDIM*(i+1)]))
          f.write(bytes(bytevalues))
          
+'''funzione di ricerca file nel caso in cui is_file() è true, ritorna il codice del file compresso e la sua path abs'''         
 def search(filename):
     path = Path(filename).resolve()
     bin_code = []
@@ -63,15 +64,15 @@ def search(filename):
         
     return bin_code,abspath
 
-        
+'''funziona che ricerca una dir e ritorna il codice decompresso di ogni file all'interno della dir specificata,in maniera ricorsiva, e relativo path abs '''
 def search_dir(dirname) :
     #mposto la Path della directory da considerare, dove cercare i file lzw 
-    p = Path(dirname)
+    p = Path(dirname).resolve()
     abspath = []
     bin_code = []
     for _ in pattern_compressed :
         #Uso la funzione rglob che mi permette di socrrere ricorsivamente le sottocartelle della Path alla ricerca di eventuali file lzw
-        for p in p.rglob(_) :
+        for p in p.rglob(_) :#uso rglob per la ricerca ricorsiva
             abspath.append(p.resolve()) #aggiungo la path assoluta alla lista di ritorno
             dec = read(p.resolve()) #richiamo la funzione decompress_file per ogni elelemento lzw all'interno di una qualsiasi dir
             bin_code.append(dec) # aggiungo il testo decompresso ad una lista
@@ -119,6 +120,8 @@ def percent_compressed(f): #decora write_file in caso di -v
             #print("La directory :",path.name," non è stata compressa del tutto")
     return compress_file
 
+'''funzione che comprime un determinato file inerente al pattern impostato'''
+
 @percent_compressed
 def write_file(filename, dict_or_trie):
     
@@ -147,12 +150,13 @@ def write_file(filename, dict_or_trie):
             
     return 0
 
-'''funzione che nel caso in cui il file sia gia compresso, ne modifica l'estensione'''
+'''funzione che nel caso in cui il file sia gia compresso con estensione .z, ne modifica l'estensione'''
 def check_ext (path):
         new_ext = path.with_suffix('.Z')
         os.rename(path,new_ext)
-
-def file_size(fname): #NON FUNZIONA CON LE DIRECTORY
+        
+'''funzione che ritorna la dim in bytes del file passato come argomento'''
+def file_size(fname): 
     path = Path(fname)
     if path.is_file() :
         statinfo = os.stat(path)
@@ -161,7 +165,7 @@ def file_size(fname): #NON FUNZIONA CON LE DIRECTORY
         dir_size = directory_size(path)
         return dir_size
     
-    
+'''funzione che ritorna la dimensione della dir passata come argomento, in bytes''' 
 def directory_size(path):
     total_size = 0
     seen = set()
@@ -183,11 +187,3 @@ def directory_size(path):
             total_size += stat.st_size
 
     return total_size  # size in bytes
-
-
-
-#print("Size: " + human((directory_size("C:/Users/Biagio/Documents/GitHub/LZW-Python-Project/stdati.py"))))
-
-write_dir('C:/Users/Biagio/Documents/LZW-Python-Project/Compressed','d')
-
-
