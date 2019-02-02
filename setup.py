@@ -3,12 +3,10 @@
 from distutils.core import setup
 
 setup(name='Lempel-Ziv-Welch',
-      version='1.0.0',
+      version='1.0',
       description='Lempel-Ziv-Welch compressor and decompressor',
-      author='mauro Leoncini',
-      author_email='leoncini@unimore.it',
-      url='https://github.com/Linguaggi-Dinamici-2018-Modulo-Python/',
+      author='Biagio Licari & Gabriele Felici',
       license='MIT',
-      packages=['src','script'],
-      scripts = ['script/compress.py', 'script/uncompress.py'],
+      packages=['src'],
+      scripts = ['script/compress', 'script/uncompress'],
      )

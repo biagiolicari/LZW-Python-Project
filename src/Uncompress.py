@@ -5,9 +5,9 @@ Created on Fri Jan 11 17:29:17 2019
 
 @author: Gabriele Felici
 """
-from src.stdati import trie_uncompression,Dict_uncompression
-from src.converter import convertinint
-from src.File_Manager import search,search_dir #da togliere
+from stdati import trie_uncompression,Dict_uncompression
+from converter import convertinint
+from File_Manager import search,search_dir #da togliere
 import os #idem sopra
 from pathlib import Path #idem
 
@@ -43,7 +43,7 @@ def Uncompress(bitstring,td):
     
     return string
 
-
+'''Funzione che dato un path, una delle st_dati possibili e un argomento -r permettere di decomprimere un/a file/dir'''
 def Uncompress_file(filename,dt,r):
     i = 0
     filename = Path(filename)

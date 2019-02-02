@@ -10,15 +10,31 @@ import argparse
 import src.Uncompress
 
 parser = argparse.ArgumentParser()  # Creiamo il nostro parser
-parser.add_argument('file',help='lista file o dir da comprimere con lzw',type = str)
-gruppo = parser.add_mutually_exclusive_group() # Creiamo il gruppo necessario per le visualizzazioni
-gruppo.add_argument("-r", "--ricorsivo", action="store_true")
+parser.add_argument('file',help='lista file o dir da comprimere con lzw',default = [], nargs = '+')
+gruppo_r = parser.add_argument_group() # Creiamo il gruppo necessario per le opzioni ricorsive 
+gruppo_stdati = parser.add_argument_group() #gruppo opzioni dict o trie
+gruppo_v = parser.add_argument_group() #opzione verbose
+gruppo_r.add_argument("-r", "--ricorsivo", action="store_true") #argomento -r che permette la ricerca ricorsiva se file = dir
+gruppo_stdati.add_argument("-t","--trie", action="store_true") #argomento st_dati trie
+gruppo_stdati.add_argument("-d","--dict", action="store_true")#argomento st_dati dict
+gruppo_v.add_argument("-v","--verbose", action="store_true")
 
 arg = parser.parse_args()
 
+arg = parser.parse_args() #parse degli argomenti passati 
 
-if arg.ricorsivo :
-    src.Uncompress.Uncompress_file(arg.file,'t', True)
-else:
-    print('senza dir')
-    src.Uncompress.Uncompress_file(arg.file,'t', False)
+for _ in arg.file:
+    
+    if arg.ricorsivo and arg.dict :
+        src.Uncompress.Uncompress_file(_,'d', True)
+    elif arg.ricorsivo and arg.trie:
+        src.Uncompress.Uncompress_file(_,'t', True)
+    else:
+        src.Uncompress.Uncompress_file(_,'t', True)
+    
+    if arg.trie :
+        src.Uncompress.Uncompress_file(_,'t', False)
+    elif arg.dict :
+        src.Uncompress.Uncompress_file(_,'d', False)
+    else:
+        src.Uncompress.Uncompress_file(_,'d', False)
