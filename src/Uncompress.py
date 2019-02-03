@@ -5,9 +5,9 @@ Created on Fri Jan 11 17:29:17 2019
 
 @author: Gabriele Felici
 """
-from stdati import trie_uncompression,Dict_uncompression
-from converter import convertinint
-from File_Manager import search,search_dir #da togliere
+from src.stdati import trie_uncompression,Dict_uncompression
+from src.converter import convertinint
+from src.File_Manager import search,search_dir #da togliere
 import os #idem sopra
 from pathlib import Path #idem
 
@@ -46,14 +46,13 @@ def Uncompress(bitstring,td):
 '''Funzione che dato un path, una delle st_dati possibili e un argomento -r permettere di decomprimere un/a file/dir'''
 def Uncompress_file(filename,dt,r):
     i = 0
-    filename = Path(filename)
-    if filename.is_file() and r == False :
+    filename = Path(filename).resolve()
+    if r == False :
         bin_cod,path = search(filename) #richiamo la funzione di ricerca file/dir
-    elif filename.is_dir() and r == True:
+    if r == True :
         bin_cod,path = search_dir(filename)
-    else:
-        print('errore!')
-    
+
+
     for _ in bin_cod :
         dec = Uncompress(_,dt) #ottengo stringa decompressa
         name = Path(path[i]) #estraggo path del file decompresso
