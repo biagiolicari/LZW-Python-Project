@@ -7,6 +7,17 @@ Created on Thu Jan  3 17:36:51 2019
 """
 from src.stdati import trie, lzw_dict
 from src.converter import convertinbits
+import time
+
+def timer(func):
+    def inner(*args, **kwargs):
+        t1 = time.time()
+        f = func(*args, **kwargs)
+        t2 = time.time()
+        print('Runtime took {} seconds'.format(t2-t1))
+        return f
+    return inner
+
 
 def Compress(input_File, char):
     
