@@ -13,7 +13,7 @@ from src.Compress import Compress,timer
 
 #from Uncompress import Uncompress
 BYTEDIM = 8
-pattern = ['*.txt','*.c','*.cc','*.xml','*.html','*.py','*.htm','*.cpp', '*.z', '*.lzw'] #pattern possibili da comprimere
+pattern = ['*.txt','*.c','*.cc','*.xml','*.html','*.py','*.htm','*.cpp', '*.z', '*.lzw', '*'] #pattern possibili da comprimere
 pattern_compressed = ['*.Z', '*.z', '*.lzw']    #pattern lzw        
 
 '''Funzione che legge all'interno di un determinato file compresso e ritorna la stringbit da dare in pasto al decompressore '''        

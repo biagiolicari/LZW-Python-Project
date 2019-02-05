@@ -73,7 +73,7 @@ def Uncompress_file(filename,dt,r,verbose):
             dec = Uncompress(_,dt) #ottengo stringa decompressa
             
         name = Path(path[i]) #estraggo path del file decompresso
-        f = open(os.path.join(name.parent,name.stem+'.txt'), 'w') #creazione nuovo file decompresso
+        f = open(os.path.join(name.parent,name.stem), 'w') #creazione nuovo file decompresso
         f.write(dec)
         f.close()
         name.unlink() #rimuovo il file compresso

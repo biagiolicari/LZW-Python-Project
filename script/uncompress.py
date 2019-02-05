@@ -20,23 +20,24 @@ gruppo_stdati.add_argument("-d","--dict", action="store_true")#argomento st_dati
 parser.add_argument("-v","--verbose", action="store_true")
 
 arg = parser.parse_args() #parse degli argomenti passati 
-
+'''
 if arg.verbose:
     src.Uncompress.Uncompress_file(arg.file,'t',False,True)
   
 if arg.ricorsivo and arg.dict :
-    src.Uncompress.Uncompress_file(arg.file,'d',False,False)
+    src.Uncompress.Uncompress_file(arg.file,'d',True,False)
 elif arg.ricorsivo and arg.trie:
-    src.Uncompress.Uncompress_file(arg.file,'t',False,False)
-else:
-    src.Uncompress.Uncompress_file(arg.file,'t',False,False)
-    
-if arg.trie :
     src.Uncompress.Uncompress_file(arg.file,'t',True,False)
-elif arg.dict :
-    src.Uncompress.Uncompress_file(arg.file,'d',True,False)
 else:
-    src.Uncompress.Uncompress_file(arg.file,'d',True,False)
+    src.Uncompress.Uncompress_file(arg.file,'t',False,False)
+'''    
+if arg.trie :
+    src.Uncompress.Uncompress_file(arg.file,'t',arg.ricorsivo,arg.verbose)
+elif arg.dict :
+    src.Uncompress.Uncompress_file(arg.file,'d',arg.ricorsivo,arg.verbose)
+else:
+    src.Uncompress.Uncompress_file(arg.file,'t',arg.ricorsivo,arg.verbose)
     
-    
+
+   
         

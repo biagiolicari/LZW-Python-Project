@@ -21,7 +21,7 @@ parser.add_argument("-v","--verbose", action="store_true")
 arg = parser.parse_args() #parse degli argomenti passati 
 
 for _ in arg.file:
-    
+
     if arg.verbose and arg.ricorsivo:
        verb = src.File_Manager.percent_compressed(src.File_Manager.write_dir)
        verb(_,'t',True)

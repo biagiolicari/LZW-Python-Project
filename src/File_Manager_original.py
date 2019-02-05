@@ -9,7 +9,8 @@ Created on Wed Jan  2 12:38:29 2019
 import os
 from src.converter import convertinbits,number_from_bytestring
 from pathlib import Path
-from src.Compress import Compress
+from src.Compress import Compress,timer
+
 #from Uncompress import Uncompress
 BYTEDIM = 8
 pattern = ['*.txt','*.c','*.cc','*.xml','*.html','*.py','*.htm','*.cpp', '*.z', '*.lzw'] #pattern possibili da comprimere
@@ -80,7 +81,7 @@ def search_dir(dirname) :
     return bin_code,abspath
 
 ''' Funzione che comprime una intera cartella con annesse subdir presenti all'interno contenenti file compatibili col pattern specificato '''
-def write_dir(dirname,dt) :
+def write_dir(dirname,dt,verbose) :
         p = Path(dirname)
     
         for _ in pattern :
@@ -91,7 +92,14 @@ def write_dir(dirname,dt) :
                     try :
                         size_b = file_size(p)
                         f = open(p,'r')
-                        cod_compressed,bin_compressed = Compress(f.read(),dt) #richiamo la definizione di Compressione sul file specificato usando il dizionario o il trie
+                        
+                        if verbose == False:
+                            cod_compressed,bin_compressed = Compress(f.read(),dt)
+                        elif verbose == True:
+                            compress_verbose = timer(Compress)
+                            cod_compressed,bin_compressed = compress_verbose(f.read(),dt)
+                        
+                        #cod_compressed,bin_compressed = Compress(f.read(),dt) #richiamo la definizione di Compressione sul file specificato usando il dizionario o il trie
                         write(bin_compressed,os.path.join(p.parent,p.stem)) #richiamo la funzione che scrive il file compresso
                         f.close()
                         newpath = p.with_suffix('.z')
@@ -102,18 +110,26 @@ def write_dir(dirname,dt) :
                             newpath.unlink()
                     except IOError :
                         print('errore in apertura di ', p)
+                                              
 
 def percent_compressed(f): #decora write_file in caso di -v
-    def compress_file(filename, dict_or_trie):
+    def compress_file(filename, dict_or_trie,verbose):
         path = Path(filename).resolve()
-        before = file_size(path)   
-        f(filename,dict_or_trie)
         if path.is_file() :
+            before = file_size(path)   
+            f(filename,dict_or_trie,verbose)
             path = path.with_suffix('.z')
             if not path.exists():
-                    print("Il file compresso è più grande dell'originale")
-                    return
+                print("Il file compresso è più grande dell'originale")
+                return
             after = file_size(path)
+            percent = (before - after)/before * 100
+            print("Compressione avvenuta del {} %".format(percent))
+            
+        if path.is_dir():
+            before = directory_size(path)
+            f(filename,dict_or_trie,verbose)
+            after = directory_size(path)          
             percent = (before - after)/before * 100
             print("Compressione avvenuta del {} %".format(percent))
         #else :
@@ -122,8 +138,8 @@ def percent_compressed(f): #decora write_file in caso di -v
 
 '''funzione che comprime un determinato file inerente al pattern impostato'''
 
-@percent_compressed
-def write_file(filename, dict_or_trie):
+
+def write_file(filename, dict_or_trie,verbose):
     
     path = Path(filename).resolve()
       
@@ -134,7 +150,13 @@ def write_file(filename, dict_or_trie):
             try :
                 size_before = file_size(path)
                 f = open(path,'r')
-                cod_compressed,bin_compressed = Compress(f.read(),dict_or_trie)
+                
+                if verbose == False:
+                    cod_compressed,bin_compressed = Compress(f.read(),dict_or_trie)
+                if verbose == True:
+                    compress_verbose = timer(Compress)
+                    cod_compressed,bin_compressed = compress_verbose(f.read(),dict_or_trie)
+                    
                 write(bin_compressed,os.path.join(path.parent,path.stem))
                 f.close()
                 newpath = path.with_suffix('.z')
@@ -186,4 +208,8 @@ def directory_size(path):
 
             total_size += stat.st_size
 
-    return total_size  # size in bytes
+    return total_size  # size in byte
+
+
+
+
