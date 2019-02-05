@@ -22,26 +22,16 @@ arg = parser.parse_args() #parse degli argomenti passati
 
 for _ in arg.file:
 
-    if arg.verbose and arg.ricorsivo:
-       verb = src.File_Manager.percent_compressed(src.File_Manager.write_dir)
-       verb(_,'t',True)
-    elif arg.verbose :
+    if arg.verbose :
        verb = src.File_Manager.percent_compressed(src.File_Manager.write_file)
-       verb(_,'t',True)
-
-    if arg.ricorsivo and arg.trie :
-        src.File_Manager.write_dir(_,'t',False)
-    elif arg.ricorsivo and arg.dict:
-        src.File_Manager.write_dir(_,'d',False)
-    elif arg.ricorsivo :
-        src.File_Manager.write_dir(_,'t',False)
-        
+       verb(_,'t',True,arg.ricorsivo)
+    
     if arg.trie:
-        src.File_Manager.write_file(_,'t',False)
+        src.File_Manager.write_file(_,'t',False,arg.ricorsivo)
     elif arg.dict :
-        src.File_Manager.write_file(_,'d',False)
+        src.File_Manager.write_file(_,'d',False,arg.ricorsivo)
     else:
-        src.File_Manager.write_file(_,'t',False)
+        src.File_Manager.write_file(_,'t',False,arg.ricorsivo)
         
         
         

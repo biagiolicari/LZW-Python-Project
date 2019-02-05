@@ -113,11 +113,11 @@ def write_dir(dirname,dt,verbose) :
                                               
 
 def percent_compressed(f): #decora write_file in caso di -v
-    def compress_file(filename, dict_or_trie,verbose):
+    def compress_file(filename, dict_or_trie,verbose,ric):
         path = Path(filename).resolve()
         if path.is_file() :
             before = file_size(path)   
-            f(filename,dict_or_trie,verbose)
+            f(filename,dict_or_trie,verbose,ric)
             path = path.with_suffix('.z')
             if not path.exists():
                 print("Il file compresso è più grande dell'originale")
@@ -126,7 +126,7 @@ def percent_compressed(f): #decora write_file in caso di -v
             
         if path.is_dir():
             before = directory_size(path)
-            f(filename,dict_or_trie,verbose)
+            f(filename,dict_or_trie,verbose,ric)
             after = directory_size(path)
             
         percent = (before - after)/before * 100
@@ -138,11 +138,11 @@ def percent_compressed(f): #decora write_file in caso di -v
 '''funzione che comprime un determinato file inerente al pattern impostato'''
 
 
-def write_file(filename, dict_or_trie,verbose):
+def write_file(filename, dict_or_trie,verbose,ric):
     
     path = Path(filename).resolve()
       
-    if path.is_file()  :
+    if path.is_file() and ric == False  :
         if path.suffix == '.z' :
             check_ext(path)
         else :
@@ -166,8 +166,8 @@ def write_file(filename, dict_or_trie,verbose):
                     newpath.unlink()
             except IOError as ex :
                 print('Errore nel file : ', ex)
-    if path.is_dir():
-        return 0
+    if path.is_dir() and ric == True :
+        write_dir(filename,dict_or_trie,verbose)
             
     return 0
 
