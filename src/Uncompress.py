@@ -7,9 +7,6 @@ Created on Fri Jan 11 17:29:17 2019
 """
 from src.stdati import trie_uncompression,Dict_uncompression
 from src.converter import convertinint
-from src.File_Manager import search,search_dir #da togliere
-import os #idem sopra
-from pathlib import Path #idem
 import time
 
 def timer(func):
@@ -53,31 +50,3 @@ def Uncompress(bitstring,td):
             string = string + T.find(val)
     
     return string
-
-'''Funzione che dato un path, una delle st_dati possibili e un argomento -r permettere di decomprimere un/a file/dir'''
-def Uncompress_file(filename,dt,r,verbose):
-    i = 0
-    filename = Path(filename).resolve()
-    if r == False :
-        bin_cod,path = search(filename) #richiamo la funzione di ricerca file/dir
-        
-    if r == True :
-        bin_cod,path = search_dir(filename)
-
-    for _ in bin_cod :
-        
-        if verbose == True:
-            uncompress_verbose = timer(Uncompress)
-            dec = uncompress_verbose(_,dt) #ottengo stringa decompressa
-        elif verbose == False:
-            dec = Uncompress(_,dt) #ottengo stringa decompressa
-            
-        name = Path(path[i]) #estraggo path del file decompresso
-        f = open(os.path.join(name.parent,name.stem), 'w') #creazione nuovo file decompresso
-        f.write(dec)
-        f.close()
-        name.unlink() #rimuovo il file compresso
-        i += 1
-       
-
-#Uncompress_file('C:/Users/Biagio/Documents/GitHub/LZW-Python-Project/Test','d',True,True)

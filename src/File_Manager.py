@@ -10,6 +10,7 @@ import os
 from src.converter import convertinbits,number_from_bytestring
 from pathlib import Path
 from src.Compress import Compress,timer
+from src.Uncompress import Uncompress,timer
 
 #from Uncompress import Uncompress
 BYTEDIM = 8
@@ -206,8 +207,35 @@ def directory_size(path):
             seen.add(stat.st_ino)
 
             total_size += stat.st_size
+        return total_size  # size in byte
 
-    return total_size  # size in byte
+            
+
+'''Funzione che dato un path, una delle st_dati possibili e un argomento -r permettere di decomprimere un/a file/dir'''
+def Uncompress_file(filename,dt,r,verbose):
+    i = 0
+    filename = Path(filename).resolve()
+    if r == False :
+        bin_cod,path = search(filename) #richiamo la funzione di ricerca file/dir
+        
+    if r == True :
+        bin_cod,path = search_dir(filename)
+
+    for _ in bin_cod :
+        
+        if verbose == True:
+            uncompress_verbose = timer(Uncompress)
+            dec = uncompress_verbose(_,dt) #ottengo stringa decompressa
+        elif verbose == False:
+            dec = Uncompress(_,dt) #ottengo stringa decompressa
+            
+        name = Path(path[i]) #estraggo path del file decompresso
+        f = open(os.path.join(name.parent,name.stem), 'w') #creazione nuovo file decompresso
+        f.write(dec)
+        f.close()
+        name.unlink() #rimuovo il file compresso
+        i += 1
+       
 
 
 
