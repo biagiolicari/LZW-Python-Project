@@ -10,11 +10,11 @@ import os
 from src.converter import convertinbits,number_from_bytestring
 from pathlib import Path
 from src.Compress import Compress,timer
-from src.Uncompress import Uncompress,timer
+from src.Uncompress import Uncompress,timer_uncompress
 
 #from Uncompress import Uncompress
 BYTEDIM = 8
-pattern = ['*.txt','*.c','*.cc','*.xml','*.html','*.py','*.htm','*.cpp', '*.z', '*.lzw', '*'] #pattern possibili da comprimere
+pattern = ['*.txt','*.c','*.cc','*.xml','*.html','*.py','*.htm','*.cpp', '*.z', '*.lzw', '*', '*.rtf'] #pattern possibili da comprimere
 pattern_compressed = ['*.Z', '*.z', '*.lzw']    #pattern lzw        
 
 '''Funzione che legge all'interno di un determinato file compresso e ritorna la stringbit da dare in pasto al decompressore '''        
@@ -91,7 +91,7 @@ def write_dir(dirname,dt,verbose) :
                     check_ext(p)
                 else :
                     try :
-                        size_b = file_size(p)
+                        size_b = file_size(p) #size prima della compressione per ogni file preso in considerazione
                         f = open(p,'r')
                         
                         if verbose == False:
@@ -137,37 +137,36 @@ def percent_compressed(f): #decora write_file in caso di -v
     return compress_file
 
 '''funzione che comprime un determinato file inerente al pattern impostato'''
-
-
 def write_file(filename, dict_or_trie,verbose,ric):
     
     path = Path(filename).resolve()
       
     if path.is_file() and ric == False  :
         if path.suffix == '.z' :
-            check_ext(path)
+            check_ext(path) #controllo se file è stato già compresso e nel caso modifico estensione
         else :
             try :
-                size_before = file_size(path)
+                size_before = file_size(path) #calcolo dimensione prima della compressione
                 f = open(path,'r')
                 
-                if verbose == False:
+                if verbose == False: 
                     cod_compressed,bin_compressed = Compress(f.read(),dict_or_trie)
-                if verbose == True:
+                if verbose == True: #se la modalita verbose è attiva applico il decoratore timer alla funzione compress
                     compress_verbose = timer(Compress)
                     cod_compressed,bin_compressed = compress_verbose(f.read(),dict_or_trie)
                     
-                write(bin_compressed,os.path.join(path.parent,path.stem))
+                write(bin_compressed,os.path.join(path.parent,path.stem))#richiamo la funzione write
                 f.close()
-                newpath = path.with_suffix('.z')
-                size_after = file_size(newpath)
+                newpath = path.with_suffix('.z') 
+                size_after = file_size(newpath) #calcolo la dimensione del file post_compressione
                 if size_before > size_after:
-                    path.unlink()
+                    path.unlink() #se la dimensione pre-compressione è superiore elimino il file compresso
                 else:
                     newpath.unlink()
             except IOError as ex :
                 print('Errore nel file : ', ex)
-    if path.is_dir() and ric == True :
+                
+    if path.is_dir() and ric == True : #nel caso in cui la modalita ricorsiva sia attiva e il file passato è una dir, chiamo la funzione write_dir()
         write_dir(filename,dict_or_trie,verbose)
             
     return 0
@@ -192,7 +191,7 @@ def directory_size(path):
     total_size = 0
     seen = set()
 
-    for dirpath, dirnames, filenames in os.walk(path):
+    for dirpath, dirnames, filenames in os.walk(path): #ricerca ricorsiva all'interno della dir
         for f in filenames:
             fp = os.path.join(dirpath, f)
 
@@ -223,8 +222,8 @@ def Uncompress_file(filename,dt,r,verbose):
 
     for _ in bin_cod :
         
-        if verbose == True:
-            uncompress_verbose = timer(Uncompress)
+        if verbose == True: 
+            uncompress_verbose = timer_uncompress(Uncompress) #richiamo decoratore timer_uncompress nel caso in cui la modalita verbose sia attiva
             dec = uncompress_verbose(_,dt) #ottengo stringa decompressa
         elif verbose == False:
             dec = Uncompress(_,dt) #ottengo stringa decompressa

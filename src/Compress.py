@@ -14,7 +14,7 @@ def timer(func):
         t1 = time.time()
         f = func(*args, **kwargs)
         t2 = time.time()
-        print('Runtime took {} seconds'.format(t2-t1))
+        print('Compress Algorithm took {} seconds'.format(t2-t1))
         return f
     return inner
 

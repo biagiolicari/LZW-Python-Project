@@ -9,12 +9,12 @@ from src.stdati import trie_uncompression,Dict_uncompression
 from src.converter import convertinint
 import time
 
-def timer(func):
+def timer_uncompress(func):
     def inner(*args, **kwargs):
         t1 = time.time()
         f = func(*args, **kwargs)
         t2 = time.time()
-        print('Runtime took {} seconds'.format(t2-t1))
+        print('Uncompress Algorithm took {} seconds'.format(t2-t1))
         return f
     return inner
 
