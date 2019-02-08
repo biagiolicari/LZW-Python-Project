@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri Feb  1 10:44:17 2019
-@author: Biagio
+Created on Fri Feb  8 15:48:46 2019
+
+@author: biagio
 """
 
 import argparse
@@ -26,7 +27,6 @@ for _ in arg.file:
     if not Path(_).exists() :
         print(_,' Not Found !!')
     else :
-    
         if arg.verbose and arg.dict:
            verb = src.File_Manager.percent_compressed(src.File_Manager.write_file)
            verb(_,'d',True,arg.ricorsivo)
@@ -34,8 +34,8 @@ for _ in arg.file:
            verb = src.File_Manager.percent_compressed(src.File_Manager.write_file)
            verb(_,'t',True,arg.ricorsivo)
         elif arg.verbose :
-           verb = src.File_Manager.percent_compressed(src.File_Manager.write_file)
-           verb(_,'t',True,arg.ricorsivo)    
+                verb = src.File_Manager.percent_compressed(src.File_Manager.write_file)
+                verb(_,'t',True,arg.ricorsivo)  
         
         if arg.trie:
             src.File_Manager.write_file(_,'t',arg.verbose,arg.ricorsivo)
@@ -43,6 +43,3 @@ for _ in arg.file:
             src.File_Manager.write_file(_,'d',arg.verbose,arg.ricorsivo)
         else:
             src.File_Manager.write_file(_,'t',arg.verbose,arg.ricorsivo)
-        
-        
-        

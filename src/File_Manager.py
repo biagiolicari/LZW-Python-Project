@@ -122,34 +122,6 @@ def write_dir(dirname,dt,verbose) :
                 except IOError :
                     print('errore in apertura di ', p)
                                               
-
-def percent_compressed(f): #decora write_file in caso di -v
-    def compress_file(filename, dict_or_trie,verbose,ric):
-
-        path = Path(filename).resolve()
-        before = 0
-        after = 0
-       
-        if path.is_file() :
-            before = file_size(path)   
-            f(filename,dict_or_trie,verbose,ric)
-            path = path.with_suffix('.z')
-            if not path.exists():
-                print("Il file compresso è più grande dell'originale")
-                return
-            after = file_size(path)
-            
-        if path.is_dir():
-            before = directory_size(path)
-            f(filename,dict_or_trie,verbose,ric)
-            after = directory_size(path)
-            
-        percent = (before - after)/before * 100
-        print("Compressione avvenuta del {} %".format(percent))
-        #else :
-            #print("La directory :",path.name," non è stata compressa del tutto")
-    return compress_file
-
 '''funzione che comprime un determinato file inerente al pattern impostato'''
 def write_file(filename, dict_or_trie,verbose,ric):
     path = Path(filename).resolve()
@@ -185,6 +157,33 @@ def write_file(filename, dict_or_trie,verbose,ric):
                 print('Errore nel file : ', ex)           
             
     return 0
+
+def percent_compressed(f): #decora write_file in caso di -v
+    def compress_file(filename, dict_or_trie,verbose,ric):
+
+        path = Path(filename).resolve()
+        before = 0
+        after = 0
+       
+        if path.is_file() :
+            before = file_size(path)   
+            f(filename,dict_or_trie,verbose,ric)
+            path = path.with_suffix('.z')
+            if not path.exists():
+                print("Il file compresso è più grande dell'originale")
+                return
+            after = file_size(path)
+            
+        if path.is_dir():
+            before = directory_size(path)
+            f(filename,dict_or_trie,verbose,ric)
+            after = directory_size(path)
+            
+        percent = (before - after)/before * 100
+        print("Compressione avvenuta del {} %".format(percent))
+        #else :
+            #print("La directory :",path.name," non è stata compressa del tutto")
+    return compress_file
 
 '''funzione che nel caso in cui il file sia gia compresso con estensione .z, ne modifica l'estensione'''
 def check_ext (path):  

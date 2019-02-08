@@ -15,5 +15,5 @@ setup(name='Lempel-Ziv-Welch',
       author='Biagio Licari & Gabriele Felici',
       license='MIT',
       packages=['src'],
-      scripts = ['script/compress.py', 'script/uncompress.py'],
+      scripts = ['script/Compress', 'script/Uncompress'],
      )
