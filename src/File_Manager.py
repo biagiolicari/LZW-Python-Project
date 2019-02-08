@@ -88,19 +88,23 @@ def search_dir(dirname) :
 ''' Funzione che comprime una intera cartella con annesse subdir presenti all'interno contenenti file compatibili col pattern specificato '''
 def write_dir(dirname,dt,verbose) :
     
-     p = Path(dirname).resolve()
+     p = Path(dirname)
          
      for _ in pattern :
          for p in p.rglob(_): #ricerca ricorsiva all'interno del dir Path specificato di file compatili per essere compressi
-             if p.suffix == 'z' :
-                 check_ext(p)
+             if p.suffix == ".z" :
+                 p.rename(p.with_suffix('.Z'))
+   
              else :
                 try :
+                    
                     size_b = file_size(p) #size prima della compressione per ogni file preso in considerazione
+                    
                     f = open(p,'r')
                         
                     if verbose == False:
                         cod_compressed,bin_compressed = Compress(f.read(),dt)
+
                     elif verbose == True:
                         compress_verbose = timer(Compress)
                         cod_compressed,bin_compressed = compress_verbose(f.read(),dt)
@@ -111,7 +115,7 @@ def write_dir(dirname,dt,verbose) :
                     newpath = p.with_suffix('.z')
                     size_a = file_size(newpath)
                     if size_b > size_a:
-                        shutil(p,newpath)
+                        shutil.copymode(p,newpath)
                         p.unlink()
                     else:
                         newpath.unlink()
@@ -153,7 +157,7 @@ def write_file(filename, dict_or_trie,verbose,ric):
     if path.is_dir() and ric == True : #nel caso in cui la modalita ricorsiva sia attiva e il file passato è una dir, chiamo la funzione write_dir()
         write_dir(filename,dict_or_trie,verbose)
       
-    if path.is_file() and ric == False  :
+    elif path.is_file() and ric == False  :
         if path.suffix == '.z' or path.suffix == '.Z' :
             check_ext(path) #controllo se file è stato già compresso e nel caso modifico estensione
             return 0
@@ -184,8 +188,8 @@ def write_file(filename, dict_or_trie,verbose,ric):
 
 '''funzione che nel caso in cui il file sia gia compresso con estensione .z, ne modifica l'estensione'''
 def check_ext (path):  
-        new_ext = Path(path).with_suffix('.Z')
-        Path(path).rename(new_ext)
+        base = os.path.splitext(path)[0]
+        os.rename(path,base+".Z")
         
 '''funzione che ritorna la dim in bytes del file passato come argomento'''
 def file_size(fname): 
@@ -245,6 +249,7 @@ def Uncompress_file(filename,dt,r,verbose):
         f = open(os.path.join(name.parent,name.stem+'.txt'), 'w') #creazione nuovo file decompresso
         f.write(dec)
         f.close()
+        shutil.copymode(name, os.path.join(name.parent,name.stem+'.txt'))
         name.unlink() #rimuovo il file compresso
         i += 1
        
