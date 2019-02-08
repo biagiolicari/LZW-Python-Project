@@ -8,9 +8,10 @@ Created on Fri Feb  1 10:44:17 2019
 
 import argparse
 import src.File_Manager
+from pathlib import Path
 
 parser = argparse.ArgumentParser()  # Creiamo il nostro parser
-parser.add_argument('file',help='lista file o dir da comprimere con lzw',type = str)
+parser.add_argument('file',help='lista file o dir da comprimere con lzw',nargs = '+', action = 'store')
 gruppo_r = parser.add_argument_group() # Creiamo il gruppo necessario per le opzioni ricorsive 
 gruppo_stdati = parser.add_argument_group() #gruppo opzioni dict o trie
 gruppo_v = parser.add_argument_group() #opzione verbose
@@ -21,12 +22,17 @@ parser.add_argument("-v","--verbose", action="store_true", help = 'opzione per v
 
 arg = parser.parse_args() #parse degli argomenti passati 
 
-if arg.trie :
-    src.File_Manager.Uncompress_file(arg.file,'t',arg.ricorsivo,arg.verbose)
-elif arg.dict :
-    src.File_Manager.Uncompress_file(arg.file,'d',arg.ricorsivo,arg.verbose)
-else:
-    src.File_Manager.Uncompress_file(arg.file,'t',arg.ricorsivo,arg.verbose)
+for file in arg.file :
+    if not Path(file).exists():
+        print(file,' Not Found !')
+    else :
+    
+        if arg.trie :
+            src.File_Manager.Uncompress_file(file,'t',arg.ricorsivo,arg.verbose)
+        elif arg.dict :
+            src.File_Manager.Uncompress_file(file,'d',arg.ricorsivo,arg.verbose)
+        else:
+            src.File_Manager.Uncompress_file(file,'t',arg.ricorsivo,arg.verbose)
 
    
         
