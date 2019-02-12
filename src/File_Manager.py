@@ -15,7 +15,7 @@ import shutil
 
 #from Uncompress import Uncompress
 BYTEDIM = 8
-pattern = ['*.txt','*.c','*.cc','*.xml','*.html','*.py','*.htm','*.cpp', '*.z', '*.lzw','*.rtf'] #pattern possibili da comprimere
+pattern = ['*.txt','*.c','*.cc','*.xml','*.html','*.py','*.htm','*.cpp', '*.z', '*.lzw','*.rtf', '*.json'] #pattern possibili da comprimere
 pattern_compressed = ['*.Z', '*.z', '*.lzw']    #pattern lzw        
 
 '''Funzione che legge all'interno di un determinato file compresso e ritorna la stringbit da dare in pasto al decompressore '''        
@@ -86,41 +86,11 @@ def search_dir(dirname) :
     return bin_code,abspath
 
 ''' Funzione che comprime una intera cartella con annesse subdir presenti all'interno contenenti file compatibili col pattern specificato '''
-def write_dir(dirname,dt,verbose) :
-    
-     p = Path(dirname)
-         
+def write_dir(dirname,dt,verbose) : 
+     p = Path(dirname)         
      for _ in pattern :
          for p in p.rglob(_): #ricerca ricorsiva all'interno del dir Path specificato di file compatili per essere compressi
-             if p.suffix == ".z" :
-                 p.rename(p.with_suffix('.Z'))
-   
-             else :
-                try :
-                    
-                    size_b = file_size(p) #size prima della compressione per ogni file preso in considerazione
-                    
-                    f = open(p,'r')
-                        
-                    if verbose == False:
-                        cod_compressed,bin_compressed = Compress(f.read(),dt)
-
-                    elif verbose == True:
-                        compress_verbose = timer(Compress)
-                        cod_compressed,bin_compressed = compress_verbose(f.read(),dt)
-                        
-                        #cod_compressed,bin_compressed = Compress(f.read(),dt) #richiamo la definizione di Compressione sul file specificato usando il dizionario o il trie
-                    write(bin_compressed,os.path.join(p.parent,p.stem)) #richiamo la funzione che scrive il file compresso
-                    f.close()
-                    newpath = p.with_suffix('.z')
-                    size_a = file_size(newpath)
-                    if size_b > size_a:
-                        shutil.copymode(p,newpath)
-                        p.unlink()
-                    else:
-                        newpath.unlink()
-                except IOError :
-                    print('errore in apertura di ', p)
+             write_file(p,dt,verbose,False)
                                               
 '''funzione che comprime un determinato file inerente al pattern impostato'''
 def write_file(filename, dict_or_trie,verbose,ric):
@@ -132,7 +102,7 @@ def write_file(filename, dict_or_trie,verbose,ric):
     elif path.is_file() and ric == False  :
         if path.suffix == '.z' or path.suffix == '.Z' :
             check_ext(path) #controllo se file è stato già compresso e nel caso modifico estensione
-            return 0
+
         else :
             try :
                 size_before = file_size(path) #calcolo dimensione prima della compressione
@@ -150,11 +120,15 @@ def write_file(filename, dict_or_trie,verbose,ric):
                 size_after = file_size(newpath) #calcolo la dimensione del file post_compressione
                 if size_before > size_after:
                     shutil.copymode(path,newpath)
-                    path.unlink() #se la dimensione pre-compressione è superiore elimino il file compresso
+                    path.unlink()
                 else:
                     newpath.unlink()
             except IOError as ex :
-                print('Errore nel file : ', ex)           
+                print('Errore nel file : ', ex)
+    else :
+        print("Inserire correttamente le opzioni di ricerca")
+        return -1
+        
             
     return 0
 
@@ -165,7 +139,7 @@ def percent_compressed(f): #decora write_file in caso di -v
         before = 0
         after = 0
        
-        if path.is_file() :
+        if path.is_file() and ric == False and verbose == True :
             before = file_size(path)   
             f(filename,dict_or_trie,verbose,ric)
             path = path.with_suffix('.z')
@@ -174,16 +148,19 @@ def percent_compressed(f): #decora write_file in caso di -v
                 return
             after = file_size(path)
             
-        if path.is_dir():
-            before = directory_size(path)
+        if path.is_dir() and ric == True and verbose == True:
+            before = directory_size(path) #richiamo la funzione che mi permette di calcoalre la dimensione di una directory
             f(filename,dict_or_trie,verbose,ric)
-            after = directory_size(path)
-            
+            after = directory_size(path) #richiamo la funzione directory size dopo che la cartella è stata compressa
+        
+        else :
+            return -1
+        
         percent = (before - after)/before * 100
         print("Compressione avvenuta del {} %".format(percent))
-        #else :
-            #print("La directory :",path.name," non è stata compressa del tutto")
+        
     return compress_file
+
 
 '''funzione che nel caso in cui il file sia gia compresso con estensione .z, ne modifica l'estensione'''
 def check_ext (path):  
@@ -230,11 +207,14 @@ def Uncompress_file(filename,dt,r,verbose):
     
     filename = Path(filename).resolve()
     
-    if r == False :
+    if r == False and filename.is_file() :
         bin_cod,path = search(filename) #richiamo la funzione di ricerca file/dir
         
-    if r == True :
+    elif r == True and filename.is_dir() :
         bin_cod,path = search_dir(filename)
+    else :
+        print("Inserire correttamente le opzioni di ricerca ")
+        return -1
 
     for _ in bin_cod :
         
