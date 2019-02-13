@@ -26,16 +26,8 @@ arg = parser.parse_args() #parse degli argomenti passati
 for _ in arg.file: 
     if not Path(_).exists() :
         print(_,' Not Found !!')
+
     else :
-        if arg.verbose and arg.dict:
-           verb = src.File_Manager.percent_compressed(src.File_Manager.write_file)
-           verb(_,'d',True,arg.ricorsivo)
-        elif arg.verbose and arg.trie:
-           verb = src.File_Manager.percent_compressed(src.File_Manager.write_file)
-           verb(_,'t',True,arg.ricorsivo)
-        elif arg.verbose :
-                verb = src.File_Manager.percent_compressed(src.File_Manager.write_file)
-                verb(_,'t',True,arg.ricorsivo)  
         
         if arg.trie:
             src.File_Manager.write_file(_,'t',arg.verbose,arg.ricorsivo)
