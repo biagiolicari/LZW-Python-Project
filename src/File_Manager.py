@@ -224,13 +224,13 @@ def Uncompress_file(filename,dt,r,verbose):
         print("Inserire correttamente le opzioni di ricerca")
         return -1
     
-    for _ in bin_cod :
+    for cod in bin_cod :
         
         if verbose == True: 
             uncompress_verbose = timer_uncompress(Uncompress) #richiamo decoratore timer_uncompress nel caso in cui la modalita verbose sia attiva
-            dec = uncompress_verbose(_,dt) #ottengo stringa decompressa
+            dec = uncompress_verbose(cod,dt) #ottengo stringa decompressa
         elif verbose == False:
-            dec = Uncompress(_,dt) #ottengo stringa decompressa
+            dec = Uncompress(cod,dt) #ottengo stringa decompressa
             
         single_path = Path(path[i]) #estraggo path del file decompresso
         f = open(os.path.join(single_path.parent,single_path.stem+'.txt'), 'w') #creazione nuovo file decompresso
