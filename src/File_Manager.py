@@ -93,12 +93,13 @@ def write_dir(dirname,dt,verbose) :
     p = Path(dirname).resolve()
 
     for p in p.rglob('*'): #ricerca ricorsiva all'interno del dir Path specificato di file compatili per essere compressi
-        if p.suffix == '.z' :
+        if p.suffix == '.z' : #nel caso in cui un file abbia estensione pari a .z richiamo la funzione check_ext()
             check_ext(p)
         else :
             if p.suffix in pattern :
                 try :
                     size_b = file_size(p) #size prima della compressione per ogni file preso in considerazione
+                    
                     f = open(p,'r')
                             
                     if verbose == False:
@@ -129,12 +130,13 @@ def write_file(filename, dict_or_trie,verbose,ric):
     path = Path(filename).resolve()
     
     if path.is_dir() and ric == True : #nel caso in cui la modalita ricorsiva sia attiva e il file passato è una dir, chiamo la funzione write_dir()
-        b_size = directory_size(path)
-        write_dir(path,dict_or_trie,verbose)
+        b_size = directory_size(path) #calcolo dim directory prima della compressione
+        
+        write_dir(path,dict_or_trie,verbose) 
 
         if verbose == True:
-            a_size = directory_size(path)
-            percent = (b_size - a_size)/b_size * 100
+            a_size = directory_size(path) #calcolo dim directory post compressione
+            percent = (b_size - a_size)/b_size * 100 #calcolo percentuale spazio risparmiato
             print("Compressione avvenuta del {} %".format(percent))            
       
     elif path.is_file() :
@@ -173,13 +175,17 @@ def write_file(filename, dict_or_trie,verbose,ric):
                     
             except IOError as ex :
                 print('Errore nel file : ', ex)
+                
     else :
         print("Inserire correttamente le opzioni di ricerca " )
         return -1
             
     return 0
 
-'''funzione di ricerca file nel caso in cui is_file() è true, ritorna il codice del file compresso e la sua path abs'''         
+'''
+Funzione di ricerca file nel caso in cui is_file() è true, ritorna il codice del file compresso e la sua path abs
+Nel caso in cui  is_dir() è true, ritorna ricorsivamente il codice compresso e la sua absPath per ogni file presente 
+'''       
 def search(filename):
     
     path = Path(filename).resolve()
@@ -188,12 +194,12 @@ def search(filename):
     abspath = []
     
     if path.is_file() : #se il path rappresenta un file eseguo i controlli per l'estensione     
-        if path.suffix in pattern_compressed :
+        if path.suffix in pattern_compressed : #se estensione file è presente in pattern_compressed
             abspath.append(path)
             dec = read(path)
             bin_code.append(dec)
                 
-    elif path.is_dir() : #se il path è un dir si decomprimono tutti i file all'interno
+    if path.is_dir() : #se il path è un dir si decomprimono tutti i file all'interno
         for p in path.rglob('*'):
             if p.suffix in pattern_compressed :
                 abspath.append(p)
@@ -202,21 +208,22 @@ def search(filename):
         
     return bin_code,abspath
 
-'''Funzione che dato un path, una delle st_dati possibili e un argomento -r permettere di decomprimere un/a file/dir'''
+'''
+Funzione che dato un path, una delle st_dati possibili e un argomento --recursive permettere di decomprimere un/a file/dir
+'''
 def Uncompress_file(filename,dt,r,verbose):
+    
     i = 0
     
     filename = Path(filename).resolve()
-    if filename.is_file() :
+    
+    if filename.is_file() or ( r == True and filename.is_dir() ) : #se filename è un file o recursive == True e filename è una directory
         bin_cod,path = search(filename) #richiamo la funzione di ricerca file/dir
-        
-    elif r == True and filename.is_dir() :
-        bin_cod,path = search(filename)
         
     else :
         print("Inserire correttamente le opzioni di ricerca")
         return -1
-
+    
     for _ in bin_cod :
         
         if verbose == True: 
@@ -225,11 +232,11 @@ def Uncompress_file(filename,dt,r,verbose):
         elif verbose == False:
             dec = Uncompress(_,dt) #ottengo stringa decompressa
             
-        name = Path(path[i]) #estraggo path del file decompresso
-        f = open(os.path.join(name.parent,name.stem+'.txt'), 'w') #creazione nuovo file decompresso
+        single_path = Path(path[i]) #estraggo path del file decompresso
+        f = open(os.path.join(single_path.parent,single_path.stem+'.txt'), 'w') #creazione nuovo file decompresso
         f.write(dec)
         f.close()
-        shutil.copymode(name, os.path.join(name.parent,name.stem+'.txt'))
-        name.unlink() #rimuovo il file compresso
+        shutil.copymode(single_path, os.path.join(single_path.parent,single_path.stem+'.txt'))
+        single_path.unlink() #rimuovo il file compresso
         i += 1
        
