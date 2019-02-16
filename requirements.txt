@@ -1,0 +1,5 @@
+argparse >= 1.4.0
+setuptools >= 40.7.0
+docutils >= 0.14
+pathlib2 >= 2.3.3
+pathlib == 1.0.1
