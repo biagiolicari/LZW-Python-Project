@@ -17,13 +17,15 @@ BYTEDIM = 8
 pattern = ['.z','.c','.cc','.xml','.html','.py','.htm','.cpp','.rtf','.json','.txt'] #pattern possibili da comprimere
 pattern_compressed = ['.Z', '.z']    #pattern lzw 
 
-'''funzione che nel caso in cui il file sia gia compresso con estensione .z, ne modifica l'estensione'''
+
 def check_ext (path):  
-        base = os.path.splitext(path)[0]
-        os.rename(path,base+".Z")
+    '''funzione che nel caso in cui il file sia gia compresso con estensione .z, ne modifica l'estensione'''
+    base = os.path.splitext(path)[0]
+    os.rename(path,base+".Z")
         
-'''funzione che ritorna la dim in bytes del file passato come argomento'''
+
 def file_size(fname): 
+    '''funzione che ritorna la dim in bytes del file passato come argomento'''
     path = Path(fname)
     if path.is_file() :
         statinfo = os.stat(path)
@@ -32,8 +34,9 @@ def file_size(fname):
         dir_size = directory_size(path)
         return dir_size
     
-'''funzione che ritorna la dimensione della dir passata come argomento, in bytes''' 
+
 def directory_size(path):
+    '''funzione che ritorna la dimensione della dir passata come argomento, in bytes''' 
     total_size = 0
     seen = set()
 
@@ -55,9 +58,8 @@ def directory_size(path):
         return total_size  # size in byte
 
                    
-
-'''Funzione che legge all'interno di un determinato file compresso e ritorna la stringbit da dare in pasto al decompressore '''        
 def read(filename) :
+    '''Funzione che legge all'interno di un determinato file compresso e ritorna la stringbit da dare in pasto al decompressore '''
     z = ''
     try :
         f = open(os.path.abspath(filename),'rb')
@@ -75,9 +77,10 @@ def read(filename) :
         
     return z
 
-''' Funzione che scrive su file la stringa compressa'''
+
 def write(stringbits, filename):
-     with open(filename+'.z', "wb") as f:
+    ''' Funzione che scrive su file la stringa compressa'''
+    with open(filename+'.z', "wb") as f:
          if len(stringbits)%BYTEDIM != 0:
              for _ in range(0, BYTEDIM-(len(stringbits)%BYTEDIM)):
                  stringbits += '0' #aggiungo il padding se serve
@@ -87,9 +90,9 @@ def write(stringbits, filename):
              bytevalues.append(number_from_bytestring(stringbits[BYTEDIM*i:BYTEDIM*(i+1)]))
          f.write(bytes(bytevalues))
          
-''' Funzione che comprime una intera cartella con annesse subdir presenti all'interno contenenti file compatibili col pattern specificato '''
+
 def write_dir(dirname,dt,verbose) :
-    
+    ''' Funzione che comprime una intera cartella con annesse subdir presenti all'interno contenenti file compatibili col pattern specificato '''
     p = Path(dirname).resolve()
 
     for p in p.rglob('*'): #ricerca ricorsiva all'interno del dir Path specificato di file compatili per essere compressi
@@ -125,8 +128,9 @@ def write_dir(dirname,dt,verbose) :
                 
                                              
 
-'''funzione che comprime un determinato file inerente al pattern impostato'''
+
 def write_file(filename, dict_or_trie,verbose,ric):
+    '''funzione che comprime un determinato file inerente al pattern impostato'''
     path = Path(filename).resolve()
     
     if path.is_dir() and ric == True : #nel caso in cui la modalita ricorsiva sia attiva e il file passato è una dir, chiamo la funzione write_dir()
@@ -182,12 +186,12 @@ def write_file(filename, dict_or_trie,verbose,ric):
             
     return 0
 
-'''
-Funzione di ricerca file nel caso in cui is_file() è true, ritorna il codice del file compresso e la sua path abs
-Nel caso in cui  is_dir() è true, ritorna ricorsivamente il codice compresso e la sua absPath per ogni file presente 
-'''       
+       
 def search(filename):
-    
+    '''
+    Funzione di ricerca file nel caso in cui is_file() è true, ritorna il codice del file compresso e la sua path abs
+    Nel caso in cui  is_dir() è true, ritorna ricorsivamente il codice compresso e la sua absPath per ogni file presente 
+    '''
     path = Path(filename).resolve()
        
     bin_code = []
@@ -208,11 +212,11 @@ def search(filename):
         
     return bin_code,abspath
 
-'''
-Funzione che dato un path, una delle st_dati possibili e un argomento --recursive permettere di decomprimere un/a file/dir
-'''
+
 def Uncompress_file(filename,dt,r,verbose):
-    
+    '''
+    Funzione che dato un path, una delle st_dati possibili e un argomento --recursive permettere di decomprimere un/a file/dir
+    '''
     i = 0
     
     filename = Path(filename).resolve()

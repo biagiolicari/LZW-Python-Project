@@ -56,28 +56,33 @@ class trie():
     def mynode(self, newmynode):
         self.__mynode = newmynode
     
-    '''Stampa la lista di adiacenza. Viene usata da print().'''
+    
     def __str__(self):
+        '''Stampa la lista di adiacenza. Viene usata da print().'''
         s = ""
         for i in range(0,len(self.__nodes)):
             s = s + self.__nodes[i][0].__str__() + " --> " + self.__nodes[i][1].__str__() + "\n"
         return s 
     
-    '''Funzione che aggiunge un nodo alla lista'''
-    def addnode(self, node):
+   
+    def addnode(self, node): 
+        '''Funzione che aggiunge un nodo alla lista'''
         self.__nodes.append((node,[]))
     
-    '''Funzione che permette di creare un arco da node a child con una label'''
+    
     #si sfrutta la sequenzialità dei nodi. Ogni valore del nodo sta al node+1 posto nella lista
     def addchildtonode(self, node, child, label):
+        '''Funzione che permette di creare un arco da node a child con una label'''
         self.__nodes[node+1][1].append((child, label))
         
-    '''Funzione che cerca il prossimo carattere a partire dal nodo attuale.
+
+    def search(self, char):
+        '''Funzione che cerca il prossimo carattere a partire dal nodo attuale.
        Ritorna il valore del nodo figlio del nodo attuale che ha come label
        nell' arco il carattere se questo arco esiste, modificando il nodo 
        attuale con il figlio, altrimenti torna il nodo, attuale e lo modifica 
        con -1, tornando così alla radice.'''
-    def search(self, char):
+        
         #la lista dei figli non è vuota, cerco il valore con l'arco che ha label il carattere che cerco
         if self.__nodes[self.__mynode+1][1]:
             nodi_child = self.__nodes[self.__mynode+1][1] #ottengo la lista di adiacenza del node
@@ -96,8 +101,9 @@ class trie():
         self.__mynode = -1
         return value
     
-    '''Funzione che torna True se ancora non si è ricominciato da capo nel trie '''
+    
     def check(self):
+        '''Funzione che torna True se ancora non si è ricominciato da capo nel trie '''
         #Il check è vero se siamo nella root, quindi se il valore di mynode = -1
         if self.__mynode == -1:
             return True
@@ -166,14 +172,15 @@ class lzw_dict() :
         self.__dict = newdict
  
     
-    '''Funzione che stampa il dizionario'''
+    
     def __str__(self) :
+        '''Funzione che stampa il dizionario'''
         return self.__dict
 
 
     def search(self, char) :
         self.__key = self.__curr + char 
-        '''se il valore di key è presente nel dizionario, ritorno col valore presente nel dizionario creato.'''
+        #se il valore di key è presente nel dizionario, ritorno col valore presente nel dizionario creato
         if self.__key in self.__dict : #         
            self.__curr = self.__key
            self.__controllo= 0
@@ -196,13 +203,13 @@ class lzw_dict() :
         else :
             return False
             
-'''Nella decompressione per ricostruire un path a partire da un valore è
-importante conoscere il padre di un nodo, che è unico.
-Il trie per la decompressione è un dizionario che associa a ogni nodo una
-coppia (father,label)'''
 
+#Nella decompressione per ricostruire un path a partire da un valore è
+#importante conoscere il padre di un nodo, che è unico.
 class trie_uncompression:
-    
+
+    '''Il trie per la decompressione è un dizionario che associa a ogni nodo una
+    coppia (father,label)'''
     def __init__(self):
         self.__lastencoded = ""
         self.__lastnode = -1

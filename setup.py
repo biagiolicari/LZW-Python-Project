@@ -7,7 +7,7 @@ if not sys.version_info.major >= 3 :
     sys.exit("Sorry, only Python 3 is supported (yet)")
     
 
-setup(name='Lempel-Ziv-Welch',
+setup(name='LZW compressor',
       version='1.0.0',
       python_requires = '>= 3.5.2',
       install_requires=[

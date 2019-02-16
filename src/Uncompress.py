@@ -20,7 +20,10 @@ def timer_uncompress(func):
 
 
 def Uncompress(bitstring,td):
-    #MANCA IL CASO PARTICOLARE
+    '''Funzione che data in input una strina di bit 0/1, ricava il valore numerico
+    su una porzione n_bit(inizialmente 9) e, mediante le strutture dati, ricostruisce
+    il testo.
+    Per ogni valore si utilizza la find, che restituisce la sequenza associata al valore.'''
     
     if td == 't' or 'T' or 'trie' :
         T = trie_uncompression()

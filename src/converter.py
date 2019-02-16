@@ -7,24 +7,27 @@ Created on Thu Dec  6 09:48:22 2018
 """
 BYTEDIM = 8
  
-''' Funzione che converte un valore intero in una stringa "0/1" '''        
+     
 def convertinbits(value, numbits):
+    ''' Funzione che converte un valore intero in una stringa "0/1" '''   
     B = ''
     for _ in range(0,numbits):
         B = str(int(value)%2) + B
         value = int(value)/2
     return B
 
-''' Funzione che converte una stringa "0/1" in un valore intero '''    
+   
 def convertinint(bits, numbits):
+    ''' Funzione che converte una stringa "0/1" in un valore intero ''' 
     value = 0
     for i in range(0,numbits):
         bit = bits[numbits-1-i]
         value = value + (2**i) * int(bit)
     return value
 
-''' Funzione che dato in ingresso una stringa rappresentante un byte, torna il valore numerico di quel byte '''
+
 def number_from_bytestring(bitstring):
+    ''' Funzione che dato in ingresso una stringa rappresentante un byte, torna il valore numerico di quel byte '''
     v = 0
     power = [2**i for i in range(0,BYTEDIM)]
     for j in range(0,BYTEDIM):

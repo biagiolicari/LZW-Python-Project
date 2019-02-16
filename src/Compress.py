@@ -20,6 +20,11 @@ def timer(func):
 
 
 def Compress(input_File, char):
+    '''Funzione che, dati in input un file e il tipo di compressione mediante d or t
+    comprime sequenzialmente codificando carattere per carattere il file in input.
+    Per ogni carattere le strutture dati valutano se può fare parte di una sequenza
+    più grande, e al check (quando il carattere non può più essere 'aggregato')
+    viene scritto il valore che rappresenta la sequenza.'''
     
     stringa_compressa = []
     bitstring = ""
@@ -50,7 +55,7 @@ def Compress(input_File, char):
             val = T.search(C)
         
         #siamo arrivati alla fine e ci troviamo in un nodo intermedio, scriviamo il valore
-        if counter == dim : #AND NOT CHECK???
+        if counter == dim :
             stringa_compressa.append(val) #non è necessario controllare T.dim
             bitstring = bitstring + convertinbits(val,numbits)
     
