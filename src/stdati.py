@@ -112,7 +112,9 @@ class trie():
         
     
 class lzw_dict() :
-    '''Classe che implementa un dizionario, sfruttando la coppia <chiave,valore>, per implementare la compressione/decompressione di Lempel-Ziv-Welch'''
+    '''
+    Classe che implementa un dizionario, sfruttando la coppia <chiave,valore>
+    per implementare la compressione di Lempel-Ziv-Welch'''
 
     def __init__(self) :
         self.__dim = 257 #END compreso
@@ -179,6 +181,11 @@ class lzw_dict() :
 
 
     def search(self, char) :
+        '''
+        Funzione che dato in ingresso il prossimo carattere della sequenza lo aggiunge alla stringa curr andando a cercare
+        se essa esiste nel dizionario e se non esiste andando ad aggiungerla reimpostando curr
+        '''
+        
         self.__key = self.__curr + char 
         #se il valore di key è presente nel dizionario, ritorno col valore presente nel dizionario creato
         if self.__key in self.__dict : #         
@@ -198,6 +205,7 @@ class lzw_dict() :
 
 
     def check(self) :
+        ''' funzione che ritorna True se il check è vero ed il valore è stato aggiunto al dizionario '''
         if self.__controllo == -1 :
             return True
         else :
@@ -281,9 +289,16 @@ class trie_uncompression:
     
     
 class Dict_uncompression:
+    '''
+    Classe che implementa un dizionario, sfruttando la coppia <chiave,valore>
+    per implementare la decompressione di Lempel-Ziv-Welch
+    '''  
+    
     def __init__(self) :
-        self.__dim = 257
-        self.__dictionary = {i : chr(i) for i in range(self.dim)}
+        '''
+        Funzione che inizializza il dizionario e variabili utili '''
+        self.__dim = 257 #END COmpreso
+        self.__dictionary = {i : chr(i) for i in range(self.dim)} #Costruisco dizionario con coppie <i,char(i)>
         self.__curr = ""
         self.__lastencoded = ""
             
@@ -334,13 +349,26 @@ class Dict_uncompression:
         self.__dict_for_trie = newdict
         
     def find(self,v) :
+        '''
+        Funzione che dato il prossimo elemento da decomprimere controlla se già presente all'interno del dizionario creato
+        altrimenti lo aggiunge andando a ricostruire le catene create dalla compressione '''
+        
         if v in self.__dictionary:
+            '''
+            Nel caso in cui il valore sia presente nel dizionario viene settata la stringa curr al valore presente nel dict[v]
+            ritornando lastencoded
+            '''
             self.__curr = self.__dictionary[v]
             self.__dictionary[self.__dim] = self.__lastencoded+self.__curr[0]
             self.__dim += 1
             self.__lastencoded = self.__curr
             return self.__lastencoded
         else: #proiezione
+            '''
+            Nel caso in cui il valore non sia presente all'interno del dizionario già creato
+            si aggiunge lastencoded + il primo valore di lastencoded al dizionario di dimensione dim
+            andando a settare lastecnoded come curr e ritornando tale valore
+            '''
             self.__dictionary[self.dim] = self.__lastencoded + self.__lastencoded[0]
             self.__dim += 1
             self.__curr = self.__dictionary[v]
