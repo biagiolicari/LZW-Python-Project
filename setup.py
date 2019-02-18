@@ -4,7 +4,7 @@ from distutils.core import setup
 import platform
 import sys
 
-if platform.python_version() < 3.6 :
+if platform.python_version() < '3.6' :
     sys.exit("Sorry, only Python 3.6 or > are supported (yet)")
     
 
