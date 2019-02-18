@@ -9,7 +9,7 @@ if not sys.version_info.major >= 3 :
 
 setup(name='LZW compressor',
       version='1.0.0',
-      python_requires = '>= 3.5.2',
+      python_requires = '>= 3.6.0',
       install_requires=[
             'argparse',
             'setuptools',
