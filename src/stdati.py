@@ -5,11 +5,14 @@ Created on Sun Dec 30 19:24:45 2018
 
 @author: Gabriele Felici
 """
-'''Codice python contenente le strutture dati utilizzazte dal compressore LZW.
+'''Codice python contenente le strutture dati utilizzate dal compressore LZW.
     Ogni oggetto python che implementa la struttura dati deve implementare un
     metodo search(char) che cerca il valore del carattere/sequenza nella 
     struttura, e un metodo check che permette di controllare se l'ultimo valore
-    non può essere aggiornato al nuovo valore corrispondente a stringa + char'''
+    non può essere aggiornato al nuovo valore corrispondente a stringa + char.
+    Le strutture dati per la decompressione invece implementano il metodo find(val),
+    che permette di associare un valore numerico a una sequenza di caratteri e aggiorna
+    la struttura dati man mano con nuovi valori possibili.'''
 
 class trie():
     ''' Classe che rappresenta un trie. Utilizza le liste di adiacenza.
@@ -20,7 +23,6 @@ class trie():
     def __init__(self):
         self.__nodes = []
         self.__dim = 257 #END compreso
-        #self.__root = -1
         self.__mynode = -1
         self.__nodes.append((-1,[]))
         for i in range(0,self.__dim):
