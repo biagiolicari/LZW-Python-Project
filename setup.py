@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 
 from distutils.core import setup
+import platform
 import sys
 
-if not sys.version_info.major >= 3 :
-    sys.exit("Sorry, only Python 3 is supported (yet)")
+if platform.python_version() < 3.6 :
+    sys.exit("Sorry, only Python 3.6 or > are supported (yet)")
     
 
 setup(name='LZW compressor',
       version='1.0.0',
-      python_requires = '>= 3.6.0',
+      python_requires = '>= 3.6.5',
       install_requires=[
             'argparse',
             'setuptools',
