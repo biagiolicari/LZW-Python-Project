@@ -10,14 +10,6 @@ if platform.python_version() < '3.6' :
 
 setup(name='LZW compressor',
       version='1.0.0',
-      python_requires = '>= 3.6.5',
-      install_requires=[
-            'argparse >= 1.4.0',
-            'setuptools >= 40.7.0',
-            'docutils >= 0.14',
-            'pathlib2 >= 2.3.3',
-            'pathlib == 1.0.1',
-           ],
       description='Lempel-Ziv-Welch compressor and decompressor',
       author='Biagio Licari & Gabriele Felici',
       license='MIT',
