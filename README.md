@@ -2,7 +2,6 @@
 
 README.txt
 setup.py
-requirements.txt
 script/Compress
 script/Uncompress
 src/Compress.py
